@@ -1,2 +1,2 @@
 # discord_bot
-Example of discord bot.
+Example of Discord bot.

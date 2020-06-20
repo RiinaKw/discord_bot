@@ -1,0 +1,22 @@
+{
+  "name": "discord_bot",
+  "version": "1.0.0",
+  "description": "Example of discord bot.\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Di",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RiinaKw/discord_bot.git"
+  },
+  "author": "Riina K.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RiinaKw/discord_bot/issues"
+  },
+  "homepage": "https://github.com/RiinaKw/discord_bot#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  }
+}
