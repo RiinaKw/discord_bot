@@ -17,7 +17,7 @@ client.on('ready', () => {
   behavior.init(client.user, channel);
   console.log(`bot id: ${client.user.id}`);
   console.log(`Ready...`);
-});
+}); // ready
 
 client.on('message', message => {
   if (message.author.bot) {
@@ -30,7 +30,7 @@ client.on('message', message => {
       behavior.message(message);
     }
   }
-});
+}); // message
 
 const token = require('../config/token');
 client.login(token);
