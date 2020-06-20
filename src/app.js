@@ -1,10 +1,11 @@
 'use strict';
 
 let moment = require('moment');
+let sender = require('./message');
 
 class Behavior {
   init(user, channel) {
-    channel.send('Ready go.');
+    sender.send(channel, 'Ready go.');
 
     this.channel = channel;
     this.timeoutId;
@@ -17,10 +18,8 @@ class Behavior {
 
   interval(boot) {
     if (! boot) {
-      let msg = moment().format('YYYY-MM-DD HH:mm:ss');
-      this.channel.send(msg)
-      .then(message => console.log(`Sent message: ${msg}`))
-      .catch(console.error);
+      let content = moment().format('YYYY-MM-DD HH:mm:ss');
+      sender.send(this.channel, content);
     }
 
     let time = moment();
@@ -39,19 +38,15 @@ class Behavior {
   }
 
   message(message) {
-    let msg = message.content;
+    let content = message.content;
     let channel = message.channel;
     let author = message.author.username;
-    message.reply(msg)
-    .then(message => console.log(`Sent message: ${msg}`))
-    .catch(console.error);
+    sender.send(message, content);
   }
 
   mention(message) {
-    let msg = 'Hi, there.';
-    message.reply(msg)
-    .then(message => console.log(`Sent message: ${msg}`))
-    .catch(console.error);
+    let content = 'Hi, there.';
+    sender.send(message, content);
   }
 }
 
