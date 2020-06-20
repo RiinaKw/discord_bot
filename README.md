@@ -18,6 +18,6 @@ The following commands only work for the user who responded.
 ### Bot Command
 The following commands affect the overall behavior.
 * ``@bot bot`` : Show all bot command.
-* ``@bot interval`` : Display automatic notification interval as minutes.
+* ``@bot bot interval`` : Display automatic notification interval as minutes.
 * ``@bot bot interval (5|10|15|20|30|60)`` : Change the automatic notification intercal, specify the minutes.
 * ``@bot bot interval next`` : Show next time for the automatic notification.
