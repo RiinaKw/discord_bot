@@ -23,8 +23,6 @@ client.on('message', message => {
   if (message.author.bot) {
     return;
   } else {
-    /*
-    */
     let isMentionToSelf = message.mentions.users.find(ch => ch.id === client.user.id);
     if (isMentionToSelf) {
       behavior.mention(message);

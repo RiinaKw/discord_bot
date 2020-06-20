@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/RiinaKw/discord_bot#readme",
   "dependencies": {
-    "discord.js": "^12.2.0"
+    "discord.js": "^12.2.0",
+    "moment": "^2.27.0"
   }
 }
