@@ -77,9 +77,9 @@ class Behavior {
 
   help() {
     let content = `bot command\n`
-      + `bot interval : Display notification interval for current time.\n`
-      + `bot interval (5|10|15|20|30|60) : Change the notification for the current time, specify the desired minutes.`
-      + `bot interval next : Show next time for the notification.`;
+      + `bot interval : Display automatic notification interval as minutes.\n`
+      + `bot interval (5|10|15|20|30|60) : Change the automatic notification intercal, specify the minutes.`
+      + `bot interval next : Show next time for the automatic notification.`;
     sender.send(this.channel, content);
   } // function help()
 
