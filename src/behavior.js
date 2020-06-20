@@ -1,7 +1,7 @@
 'use strict';
 
-let moment = require('moment');
-let sender = require('./message');
+const moment = require('moment');
+const sender = require('./message');
 
 let app;
 
@@ -24,7 +24,7 @@ class Behavior {
   } // function init()
 
   channelName() {
-    return 'bot_test';
+    return app.channelName();
   } // function channelName()
 
   interval(boot) {

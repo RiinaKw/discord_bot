@@ -1,18 +1,25 @@
 'use strict';
 
-let moment = require('moment');
-let sender = require('./message');
+const moment = require('moment');
+const sender = require('./message');
 
+const config = require('../config/global');
 const reminder = require('../model/reminder');
 
 class App {
   init(user, channel) {
     sender.send(channel, 'Ready go.');
-    user.setPresence({ activity: { name: 'discord.js ', type: 'PLAYING' } });
+    if (config.activity) {
+      user.setPresence({activity: config.activity});
+    }
   } // function init()
 
+  channelName() {
+    return config.channel || 'general';
+  } // function channelName()
+
   defaultIntervalMinutes() {
-    return 60;
+    return config.interval || 60;
   } // function defaultIntervalMinutes()
 
   interval(channel) {

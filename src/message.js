@@ -1,6 +1,6 @@
 'use strict';
 
-let moment = require('moment');
+const moment = require('moment');
 
 module.exports = {
   send: (channel, content, params) => {
