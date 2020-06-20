@@ -16,7 +16,8 @@ The following commands only work for the user who responded.
 * ``@bot delete reminder [title]`` : Delete reminder which title matched
 
 ### Bot Command
-The following commands affect the overall behavior.
+The following commands affect the overall behavior.  
+The command must be mention for bot, and followed by string "bot".
 * ``@bot bot`` : Show all bot command.
 * ``@bot bot interval`` : Display automatic notification interval as minutes.
 * ``@bot bot interval (5|10|15|20|30|60)`` : Change the automatic notification intercal, specify the minutes.
