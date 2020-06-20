@@ -112,4 +112,7 @@ class App {
   } // function replyDefault()
 } // class App
 
-require('./behavior')(new App);
+const app = new App;
+require('./behavior')(app);
+
+module.exports = app;
