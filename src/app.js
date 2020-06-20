@@ -12,7 +12,7 @@ class App {
   } // function init()
 
   defaultIntervalMinutes() {
-    return 2;
+    return 60;
   } // function defaultIntervalMinutes()
 
   interval(channel) {
@@ -46,20 +46,28 @@ class App {
     if (match = body.match(/^reminder expired(\s|$)/)) {
       reminder.selectExpired(message.author.id)
       .then(rows => {
-        for (let row of rows) {
-          console.log(row);
-          let deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
-          sender.reply(message, `${row.name}, deadline is ${deadline}`);
+        if (rows.length > 0) {
+          for (let row of rows) {
+            console.log(row);
+            let deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
+            sender.reply(message, `${row.name}, deadline is ${deadline}`);
+          }
+        } else {
+          sender.reply(message, `no reminder expired`);
         }
       });
       return true;
     } else if (match = body.match(/^reminder all(\s|$)/)) {
       reminder.selectAll(message.author.id)
       .then(rows => {
-        for (let row of rows) {
-          console.log(row);
-          let deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
-          sender.reply(message, `${row.name}, deadline is ${deadline}`);
+        if (rows.length > 0) {
+          for (let row of rows) {
+            console.log(row);
+            let deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
+            sender.reply(message, `${row.name}, deadline is ${deadline}`);
+          }
+        } else {
+          sender.reply(message, `no reminder`);
         }
       });
       return true;
