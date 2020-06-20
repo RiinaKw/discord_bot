@@ -1,0 +1,8 @@
+'use strict';
+
+module.exports = {
+  host: '__YOUR_DB_HOST__',
+  user: '__YOUR_DB_USER__',
+  password: '__YOUR_DB_PASSWORD__',
+  database: '__YOUR_DB_NAME__'
+}

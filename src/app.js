@@ -3,6 +3,22 @@
 let moment = require('moment');
 let sender = require('./message');
 
+
+const mariadb = require('mariadb');
+const dbparams = require('../config/database')
+const pool = mariadb.createPool(dbparams);
+let connection;
+
+pool.getConnection()
+.then(conn => {
+  connection = conn;
+  console.log('connect to mariadb');
+})
+.catch(err => {
+  throw err;
+});
+
+
 class App {
   init(user, channel) {
     sender.send(channel, 'Ready go.');
@@ -15,7 +31,17 @@ class App {
 
   interval(channel) {
     let content = moment().format('YYYY-MM-DD HH:mm:ss');
-    sender.send(this.channel, content);
+    sender.send(channel, content);
+
+    connection.query(`SELECT * FROM reminders WHERE deadline <= NOW();`)
+    .then(rows => {
+      for (let row of rows) {
+        console.log(row);
+        sender.send(channel, `reminder : ${row.name}, deadline is ${row.deadline}`, {
+          reply: row.user_id
+        });
+      }
+    });
   } // function interval()
 
   message(message) {

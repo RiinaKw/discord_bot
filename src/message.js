@@ -3,9 +3,12 @@
 let moment = require('moment');
 
 module.exports = {
-  send: (channel, content) => {
+  send: (channel, content, params) => {
+    if (params === undefined) {
+      params = {};
+    }
     let now = moment().format('YYYY-MM-DD HH:mm:ss');
-    channel.send(content)
+    channel.send(content, params)
     .then(message => console.log(`${now}, sent message: ${content}`))
     .catch(console.error);
   },
