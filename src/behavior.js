@@ -101,7 +101,9 @@ class Behavior {
         this.help();
       }
     } else {
-      app.reply(message, body)
+      if (! app.reply(message, body)) {
+        app.replyDefault(message, body)
+      }
     }
   } // function mention()
 } // class Behavior

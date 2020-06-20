@@ -23,8 +23,8 @@ class App {
     .then(rows => {
       for (let row of rows) {
         console.log(row);
-        let time = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
-        sender.send(channel, `reminder : ${row.name}, deadline is ${time}`, {
+        let deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
+        sender.send(channel, `reminder : ${row.name}, deadline is ${deadline}`, {
           reply: row.user_id
         });
       }
@@ -42,10 +42,59 @@ class App {
   } // function message()
 
   reply(message, body) {
+    let match;
+    if (match = body.match(/^reminder expired(\s|$)/)) {
+      reminder.selectExpired(message.author.id)
+      .then(rows => {
+        for (let row of rows) {
+          console.log(row);
+          let deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
+          sender.reply(message, `${row.name}, deadline is ${deadline}`);
+        }
+      });
+      return true;
+    } else if (match = body.match(/^reminder all(\s|$)/)) {
+      reminder.selectAll(message.author.id)
+      .then(rows => {
+        for (let row of rows) {
+          console.log(row);
+          let deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss');
+          sender.reply(message, `${row.name}, deadline is ${deadline}`);
+        }
+      });
+      return true;
+    } else if (match = body.match(/^register reminder\s+(?<name>.+?)\s+(?<deadline>.+?)$/)) {
+      let name = match.groups.name
+      let deadline = moment(match.groups.deadline).format('YYYY-MM-DD HH:mm:ss');
+
+      reminder.insert(message.author.id, name, deadline)
+      .then(rows => {
+        console.log(rows);
+        sender.reply(message, `accepted.`);
+      })
+      .catch(err => {
+        sender.reply(message, `[error] fail to accept.`);
+      });
+      return true;
+    } else if (match = body.match(/^delete reminder\s+(?<name>.+?)$/)) {
+      let name = match.groups.name;
+      reminder.delete(message.author.id, name)
+      .then(rows => {
+        console.log(rows);
+        sender.reply(message, `accepted.`);
+      })
+      .catch(err => {
+        sender.reply(message, `[error] fail to accept.`);
+      });
+      return true;
+    }
+  } // function reply()
+
+  replyDefault(message, body) {
     // reply for message
     let content = 'Hi, there.';
     sender.reply(message, content);
-  } // function reply()
+  } // function replyDefault()
 } // class App
 
 require('./behavior')(new App);
