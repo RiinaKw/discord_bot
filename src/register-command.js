@@ -36,6 +36,7 @@ const json = {
   ]
 }
 */
+/*
 const json = {
   name: 'bot',
   description: 'Execute a bot command',
@@ -67,20 +68,11 @@ const json = {
     }
   ]
 }
-/*
-const json = {
-  name: 'bot-interval',
-  description: 'Change execution interval',
-  options: [
-    {
-      name: 'minutes',
-      description: 'Execution interval',
-      type: 5,
-      required: false
-    }
-  ]
-}
 */
+const json = {
+  name: 'not-implemented',
+  description: 'Example of not-implemented slash command'
+}
 
 const api = require('./lib/api')
 api.post('/applications/720987257733120080/commands', json)

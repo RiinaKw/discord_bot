@@ -40,50 +40,29 @@ client.on('ready', () => {
   client.ws.on('INTERACTION_CREATE', async interaction => {
     const command = interaction.data.name.toLowerCase()
     const args = interaction.data.options
-    console.log(interaction.data)
+    const user = interaction.member.user
+    const username = `${user.username}#${user.discriminator}`
+    log.debug(`${username} used slash command ${command}`)
+    log.debug('args : ', args)
 
     try {
-      switch (command) {
-        case 'blep': {
-          const animal = args.find(item => item.name === 'animal').value
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: 'Hello World! ' + animal
-              }
-            }
-          })
-          break
-        }
-
-        case 'bot': {
-          const subcommand = args.find(item => item.name === 'subcommand')
-          console.log(subcommand)
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: 'this is a bot ' + subcommand
-              }
-            }
-          })
-          break
-        }
-
-        case 'bot-interval':
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: 'interval setting'
-              }
-            }
-          })
-          break
-      } // switch
+      let slash
+      try {
+        slash = require('./slashes/' + command)
+      } catch (e) {
+        throw new Error(`unknown slash command : ${command}`)
+      }
+      slash.execute(client, interaction, args)
     } catch (e) {
       log.fatal(e)
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: e.message
+          }
+        }
+      })
     }
   })
 }) // ready
