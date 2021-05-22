@@ -45,11 +45,44 @@ const json = {
     {
       name: 'subcommand',
       description: 'sub command',
+      type: 2,
+      options: [
+        {
+          name: 'interval',
+          description: 'Execute bot interval',
+          type: 1,
+          options: [
+            {
+              name: 'minutes',
+              description: 'interval value',
+              type: 4,
+              required: false
+            }
+          ]
+        },
+        {
+          name: 'dummy',
+          description: 'Dummy subcommand',
+          type: 1
+        }
+      ]
+    }
+  ]
+}
+/*
+const json = {
+  name: 'bot-interval',
+  description: 'Change execution interval',
+  options: [
+    {
+      name: 'minutes',
+      description: 'Execution interval',
       type: 5,
       required: false
     }
   ]
 }
+*/
 
 const url = 'https://discord.com/api/v8/applications/720987257733120080/commands'
 const token = require('../config/token')

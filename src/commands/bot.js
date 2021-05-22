@@ -38,6 +38,51 @@ module.exports = {
           ]
           sender.send(b.channel, content)
           return
+        } // case 'interval'
+
+        case 'slash': {
+          if (args.length) {
+            const subcommand = args.shift().toLowerCase()
+            sender.send(b.channel, 'slash! will do ' + subcommand)
+
+            switch (subcommand) {
+              case 'list': {
+                const url = 'https://discord.com/api/v8/applications/720987257733120080/commands'
+                const token = require('../../config/token')
+
+                const options = {
+                  uri: url,
+                  headers: {
+                    'Content-type': 'application/json',
+                    Authorization: 'Bot ' + token
+                  }
+                }
+                console.log(options)
+
+                const request = require('request')
+                request.get(options, function (err, res, body) {
+                  if (err) {
+                    console.log('Error: ' + err.message)
+                    return
+                  }
+
+                  JSON.parse(body).forEach(command => {
+                    console.log(command)
+                    const content = [
+                      `**${command.name}** :`,
+                      `  id : ${command.id}`,
+                      `  description : ${command.description}`
+                    ]
+                    sender.send(b.channel, content)
+                  })
+                })
+                return
+              }
+            }
+          } else {
+            sender.send(b.channel, 'slash!')
+          }
+          return
         }
       } // switch
     } // if (args.length)

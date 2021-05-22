@@ -40,21 +40,48 @@ client.on('ready', () => {
   client.ws.on('INTERACTION_CREATE', async interaction => {
     const command = interaction.data.name.toLowerCase()
     const args = interaction.data.options
-    console.log(args)
+    console.log(interaction.data)
 
     try {
       switch (command) {
-        case 'blep':
+        case 'blep': {
+          const animal = args.find(item => item.name === 'animal').value
           client.api.interactions(interaction.id, interaction.token).callback.post({
             data: {
               type: 4,
               data: {
-                content: 'Hello World!'
+                content: 'Hello World! ' + animal
               }
             }
           })
           break
-      }
+        }
+
+        case 'bot': {
+          const subcommand = args.find(item => item.name === 'subcommand')
+          console.log(subcommand)
+          client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+              type: 4,
+              data: {
+                content: 'this is a bot ' + subcommand
+              }
+            }
+          })
+          break
+        }
+
+        case 'bot-interval':
+          client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+              type: 4,
+              data: {
+                content: 'interval setting'
+              }
+            }
+          })
+          break
+      } // switch
     } catch (e) {
       log.fatal(e)
     }
