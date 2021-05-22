@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('fs')
-const log = require('./lib/log4js')
+const process = require('./lib/process')
 
 let behavior
 
@@ -28,12 +28,8 @@ try {
     client.commands.set(command.name, command)
   }
 } catch (err) {
-  log.fatal(err)
   client.destroy()
-  setTimeout(
-    () => { process.exit(1) },
-    100
-  )
+  process.shutdown(err)
 }
 
 client.on('ready', () => {

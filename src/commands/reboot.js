@@ -1,6 +1,7 @@
 'use strict'
 
 const sender = require('../lib/message')
+const process = require('../lib/process')
 const log = require('../lib/log4js')
 
 module.exports = {
@@ -10,9 +11,6 @@ module.exports = {
   execute (message, args) {
     sender.send(message.channel, 'rebooting...')
     log.fatal('reboot')
-    setTimeout(
-      () => { process.exit(0) },
-      1000
-    )
+    process.shutdown()
   }
 }

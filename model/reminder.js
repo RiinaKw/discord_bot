@@ -1,6 +1,6 @@
 'use strict'
 
-const log = require('../src/lib/log4js')
+const process = require('../src/lib/process')
 
 let connection
 
@@ -10,11 +10,7 @@ require('../model/database')
     console.log('connect to mariadb')
   })
   .catch(err => {
-    log.fatal(err)
-    setTimeout(
-      () => { process.exit(1) },
-      100
-    )
+    process.shutdown(err)
   })
 
 module.exports = class Reminder {
