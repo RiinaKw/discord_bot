@@ -53,6 +53,33 @@ class Behavior {
     return next.format('YYYY-MM-DD HH:mm:ss')
   } // function nextInterval()
 
+  discordCommand (message) {
+    const client = message.client
+    const content = message.content
+    const match = content.match(/^<@!?\d+>\s+(?<body>.*)$/)
+    const body = match.groups.body
+
+    const args = body.trim().split(/\s+/)
+    const command = args.shift().toLowerCase()
+
+    if (!client.commands.has(command)) {
+      return false
+    }
+
+    try {
+      log.fatal(command, args)
+      log.fatal(client.commands)
+
+      client.commands.get(command).execute(message, args)
+      return true
+    } catch (err) {
+      console.log(err)
+      message.reply('there was an error trying to execute that command!')
+    }
+
+    return false
+  }
+
   // bot command
   command (args) {
     const subcommand = args.shift().toLowerCase()
