@@ -1,7 +1,6 @@
 'use strict'
 
 const moment = require('moment')
-const sender = require('./message')
 const log = require('./lib/log4js')
 
 let app
@@ -61,17 +60,25 @@ class Behavior {
     const body = match.groups.body
 
     const args = body.trim().split(/\s+/)
-    const command = args.shift().toLowerCase()
+    const name = args.shift().toLowerCase()
 
-    if (!client.commands.has(command)) {
+    if (!client.commands.has(name)) {
       return false
     }
+    const command = client.commands.get(name)
 
     try {
-      log.fatal(command, args)
-      log.fatal(client.commands)
+      log.warn(command, args)
 
-      client.commands.get(command).execute(message, args)
+      if (command.permissions) {
+        const authorPerms = message.channel.permissionsFor(message.author)
+        if (!authorPerms || !authorPerms.has(command.permissions)) {
+          message.reply('403 Permission denied')
+          return true
+        }
+      }
+
+      command.execute(message, args)
       return true
     } catch (err) {
       console.log(err)

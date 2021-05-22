@@ -106,11 +106,6 @@ class App {
           sender.reply(message, '[error] fail to accept.')
         })
       return true
-    } else if (match = body.match(/^reboot$/)) {
-      sender.reply(message, 'reboot')
-      // trigger error, non-existing function
-      boo()
-      return true
     }
   } // function reply()
 
@@ -119,6 +114,10 @@ class App {
     const content = 'Hi, there.'
     sender.reply(message, content)
   } // function replyDefault()
+
+  killmyself () {
+    boo()
+  }
 } // class App
 
 const app = new App()
