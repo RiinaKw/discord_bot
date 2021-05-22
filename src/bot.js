@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const process = require('./lib/process')
+const log = require('./lib/log4js')
 
 let behavior
 
@@ -20,13 +21,12 @@ try {
 
   client.commands = new Discord.Collection()
   const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'))
-
-  for (const file of commandFiles) {
+  commandFiles.forEach(file => {
     const command = require(`./commands/${file}`)
     // set a new item in the Collection
     // with the key as the command name and the value as the exported module
     client.commands.set(command.name, command)
-  }
+  })
 } catch (err) {
   client.destroy()
   process.shutdown(err)
@@ -34,8 +34,8 @@ try {
 
 client.on('ready', () => {
   behavior.init(client)
-  console.log(`bot id: ${client.user.id}`)
-  console.log('Ready...')
+  log.debug(`bot id: ${client.user.id}`)
+  log.debug('Ready...')
 }) // ready
 
 client.on('message', message => {
