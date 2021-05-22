@@ -50,28 +50,31 @@ class Behavior {
   } // function nextInterval()
 
   // bot command
-  command(command) {
-    log.info(command);
-    let match;
-    if (match = command.match(/^interval(\s|$)/)) {
-
-      // interval command
-      if (match = command.match(/^interval\s+next/)) {
-        // show next interval time
-        let next = this.nextInterval();
-        this.channel.send(`bot mode : next interval is ${next}`);
-      } else if (match = command.match(/^interval\s+(?<interval>\d+)/)) {
-        // change interval time
-        let intervalMinutes = match.groups.interval;
-        this.intervalPerMinutes = parseInt(intervalMinutes);
-        this.interval(true);
-        sender.send(this.channel, `bot mode : set interval to ${this.intervalPerMinutes} minutes`);
-        console.log(`bot interval changed : ${this.intervalPerMinutes} minutes`);
-      } else {
-        // show current interval
-        sender.send(this.channel, `bot mode : current interval is ${this.intervalPerMinutes} minutes`);
+  command (args) {
+    const subcommand = args.shift().toLowerCase()
+    if (subcommand === 'interval') {
+      if (args.length) {
+        const amount = parseInt(args.shift())
+        if (!isNaN(amount)) {
+          // change interval time
+          this.intervalPerMinutes = amount
+          this.interval(true)
+          sender.send(
+            this.channel,
+            `bot mode : set interval to ${this.intervalPerMinutes} minutes`
+          )
+          log.info(`bot interval changed : ${this.intervalPerMinutes} minutes`)
+          return
+        }
       }
-
+      // show current interval
+      const next = this.nextInterval()
+      sender.send(
+        this.channel,
+        'bot mode :\n' +
+        `  current interval is ${this.intervalPerMinutes} minutes\n` +
+        `  next interval is ${next}`
+      )
     } else {
       this.help()
     }
@@ -85,22 +88,33 @@ class Behavior {
     sender.send(this.channel, content);
   } // function help()
 
-  message(message) {
-    app.message(message);
+  message (message) {
+    app.message(message)
   } // function message()
 
-  mention(message) {
-    let content = message.content;
-    let match = content.match(/^<@!?\d+>\s+(?<body>.*)$/);
-    let body = match.groups.body;
+  mention (message) {
+    const content = message.content
+    const match = content.match(/^<@!?\d+>\s+(?<body>.*)$/)
+    const body = match.groups.body
 
-    if (body.match(/^bot(\s|$)/)) {
+    const args = body.split(/\s+/)
+    const command = args.shift().toLowerCase()
+
+    if (command === 'bot') {
+      /*
       if (match = body.match(/^bot\s+?(?<command>.*?)$/)) {
         let command = match.groups.command;
         this.command(command);
         console.log(`command : ${command}`);
       } else {
         this.help();
+      }
+      */
+      if (args.length) {
+        log.info('command : ', args)
+        this.command(args)
+      } else {
+        this.help()
       }
     } else {
       if (! app.reply(message, body)) {
