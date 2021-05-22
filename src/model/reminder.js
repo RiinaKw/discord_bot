@@ -6,13 +6,19 @@ require('../lib/database')
     connection = conn
   })
 
-module.exports = class Reminder {
+const Base = require('./base')
+
+module.exports = class Reminder extends Base {
+  static get TABLE () {
+    return 'reminders'
+  }
+
   static selectExpired (userId) {
     if (userId === undefined) {
-      return connection.query('SELECT * FROM reminders WHERE deadline <= NOW();')
+      return connection.query(`SELECT * FROM ${this.TABLE} WHERE deadline <= NOW();`)
     } else {
       return connection.query(
-        'SELECT * FROM reminders WHERE user_id = ? AND deadline <= NOW();',
+        `SELECT * FROM ${this.TABLE} WHERE user_id = ? AND deadline <= NOW();`,
         [userId]
       )
     }
@@ -20,21 +26,21 @@ module.exports = class Reminder {
 
   static selectAll (userId) {
     return connection.query(
-      'SELECT * FROM reminders WHERE user_id = ?;',
+      `SELECT * FROM ${this.TABLE} WHERE user_id = ?;`,
       [userId]
     )
   }
 
   static insert (userId, name, deadline) {
     return connection.query(
-      'INSERT INTO reminders(user_id, name, deadline) VALUES(?, ?, ?);',
+      `INSERT INTO ${this.TABLE}(user_id, name, deadline) VALUES(?, ?, ?);`,
       [userId, name, deadline]
     )
   } // function insert()
 
   static delete (userId, name) {
     return connection.query(
-      'DELETE FROM reminders WHERE user_id = ? AND name = ?;',
+      `DELETE FROM ${this.TABLE} WHERE user_id = ? AND name = ?;`,
       [userId, name]
     )
   } // function delete()

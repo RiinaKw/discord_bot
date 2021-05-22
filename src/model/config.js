@@ -6,10 +6,16 @@ require('../lib/database')
     connection = conn
   })
 
-module.exports = class Config {
+const Base = require('./base')
+
+module.exports = class Config extends Base {
+  static get TABLE () {
+    return 'configs'
+  }
+
   static select (name) {
     const query = connection.query(
-      'SELECT * FROM configs WHERE name = ?;',
+      `SELECT * FROM ${this.TABLE} WHERE name = ?;`,
       [name]
     )
       .then(rows => {
@@ -23,7 +29,7 @@ module.exports = class Config {
 
   static update (name, value) {
     return connection.query(
-      'UPDATE configs SET value = ? WHERE name = ?;',
+      `UPDATE ${this.TABLE} SET value = ? WHERE name = ?;`,
       [value, name]
     )
   }
