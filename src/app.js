@@ -52,62 +52,6 @@ class App {
   } // function message()
 
   reply (message, body) {
-    let match
-    if (match = body.match(/^reminder expired(\s|$)/)) {
-      reminder.selectExpired(message.author.id)
-        .then(rows => {
-          if (rows.length > 0) {
-            rows.forEach(row => {
-              log.debug(row)
-              const deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss')
-              sender.reply(message, `${row.name}, deadline is ${deadline}`)
-            })
-          } else {
-            sender.reply(message, 'no reminder expired')
-          }
-        })
-      return true
-    } else if (match = body.match(/^reminder all(\s|$)/)) {
-      reminder.selectAll(message.author.id)
-        .then(rows => {
-          if (rows.length > 0) {
-            rows.forEach(row => {
-              log.debug(row)
-              const deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss')
-              sender.reply(message, `${row.name}, deadline is ${deadline}`)
-            })
-          } else {
-            sender.reply(message, 'no reminder')
-          }
-        })
-      return true
-    } else if (match = body.match(/^register reminder\s+(?<name>.+?)\s+(?<deadline>.+?)$/)) {
-      const name = match.groups.name
-      const deadline = moment(match.groups.deadline).format('YYYY-MM-DD HH:mm:ss')
-
-      reminder.insert(message.author.id, name, deadline)
-        .then(rows => {
-          console.log(rows)
-          sender.reply(message, 'accepted.')
-        })
-        .catch(err => {
-          console.log(err)
-          sender.reply(message, '[error] fail to accept.')
-        })
-      return true
-    } else if (match = body.match(/^delete reminder\s+(?<name>.+?)$/)) {
-      const name = match.groups.name
-      reminder.delete(message.author.id, name)
-        .then(rows => {
-          console.log(rows)
-          sender.reply(message, 'accepted.')
-        })
-        .catch(err => {
-          console.log(err)
-          sender.reply(message, '[error] fail to accept.')
-        })
-      return true
-    }
   } // function reply()
 
   replyDefault (message, body) {
@@ -115,10 +59,6 @@ class App {
     const content = 'Hi, there.'
     sender.reply(message, content)
   } // function replyDefault()
-
-  killmyself () {
-    boo()
-  }
 } // class App
 
 const app = new App()
