@@ -1,7 +1,7 @@
 'use strict'
 
 const moment = require('moment')
-const sender = require('./message')
+const sender = require('./lib/message')
 const log = require('./lib/log4js')
 
 const config = require('../config/global')

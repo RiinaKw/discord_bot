@@ -1,6 +1,6 @@
 'use strict'
 
-const sender = require('../message')
+const sender = require('../lib/message')
 const log = require('../lib/log4js')
 
 module.exports = {
