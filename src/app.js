@@ -2,6 +2,7 @@
 
 const moment = require('moment')
 const sender = require('./message')
+const log = require('./lib/log4js')
 
 const config = require('../config/global')
 const reminder = require('../model/reminder')
@@ -28,13 +29,13 @@ class App {
 
     reminder.selectExpired()
       .then(rows => {
-        for (let row of rows) {
-          console.log(row)
+        rows.forEach(row => {
+          log.debug(row)
           const deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss')
           sender.send(channel, `reminder : ${row.name}, deadline is ${deadline}`, {
             reply: row.user_id
           })
-        }
+        })
       })
   } // function interval()
 
@@ -54,11 +55,11 @@ class App {
       reminder.selectExpired(message.author.id)
         .then(rows => {
           if (rows.length > 0) {
-            for (let row of rows) {
-              console.log(row)
+            rows.forEach(row => {
+              log.debug(row)
               const deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss')
               sender.reply(message, `${row.name}, deadline is ${deadline}`)
-            }
+            })
           } else {
             sender.reply(message, 'no reminder expired')
           }
@@ -68,11 +69,11 @@ class App {
       reminder.selectAll(message.author.id)
         .then(rows => {
           if (rows.length > 0) {
-            for (let row of rows) {
-              console.log(row)
+            rows.forEach(row => {
+              log.debug(row)
               const deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss')
               sender.reply(message, `${row.name}, deadline is ${deadline}`)
-            }
+            })
           } else {
             sender.reply(message, 'no reminder')
           }
@@ -104,7 +105,7 @@ class App {
           sender.reply(message, '[error] fail to accept.')
         })
       return true
-    } else if (match = body.match(/reboot/)) {
+    } else if (match = body.match(/^reboot$/)) {
       sender.reply(message, 'reboot')
       // trigger error, non-existing function
       boo()
