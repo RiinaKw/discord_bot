@@ -2,6 +2,7 @@
 
 const sender = require('../lib/message')
 const log = require('../lib/log4js')
+const dbConfig = require('../model/config')
 
 module.exports = {
   name: 'bot',
@@ -18,11 +19,13 @@ module.exports = {
               // change interval time
               b.intervalPerMinutes = amount
               b.interval(true)
+              dbConfig.update('interval', amount)
+
               sender.send(
                 b.channel,
-                `bot mode : set interval to ${b.intervalPerMinutes} minutes`
+                `bot mode : set interval to ${amount} minutes`
               )
-              log.info(`bot interval changed : ${b.intervalPerMinutes} minutes`)
+              log.info(`bot interval changed : ${amount} minutes`)
               return
             }
           }

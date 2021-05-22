@@ -5,6 +5,7 @@ const sender = require('./lib/message')
 const log = require('./lib/log4js')
 
 const reminder = require('./model/reminder')
+const dbConfig = require('./model/config')
 
 const config = require('../config/global')
 
@@ -16,6 +17,15 @@ class App {
       client.user.setPresence({ activity: config.activity })
     }
     client.app = this
+
+    dbConfig.select('interval')
+      .then(row => {
+        const b = client.behavior
+
+        b.intervalPerMinutes = row.value
+        b.interval(true)
+        log.debug(`current interval : ${row.value}`)
+      })
   } // function init()
 
   channelName () {
