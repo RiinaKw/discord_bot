@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/RiinaKw/discord_bot#readme",
   "dependencies": {
-    "discord.js": "^12.2.0",
+    "discord.js": "^12.5.3",
     "log4js": "^6.3.0",
-    "mariadb": "^2.4.0",
-    "moment": "^2.27.0"
+    "mariadb": "^2.5.3",
+    "moment": "^2.29.1"
   }
 }
