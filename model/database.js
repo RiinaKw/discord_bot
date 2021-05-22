@@ -1,9 +1,17 @@
 'use strict'
 
 const mariadb = require('mariadb')
-const dbparams = require('../config/database')
-const pool = mariadb.createPool(dbparams)
 
-const promise = pool.getConnection()
+try {
+  const dbparams = require('../config/database')
+  if (!dbparams.database) {
+    throw new Error('no database selected')
+  }
 
-module.exports = promise
+  const pool = mariadb.createPool(dbparams)
+  const promise = pool.getConnection()
+
+  module.exports = promise
+} catch (e) {
+  module.exports = new Promise(() => { throw e })
+}
