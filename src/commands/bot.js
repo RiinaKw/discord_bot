@@ -67,17 +67,38 @@ module.exports = {
               } // case 'list'
 
               case 'show': {
-                const api = require('../lib/api')
-                api.get('/applications/720987257733120080/commands/845688492004868146')
-                  .then(json => {
-                    log.info(json)
-                    sender.send(b.channel, 'see console')
-                  })
-                  .catch(err => {
-                    log.fatal('ERROR', err)
-                  })
+                if (args.length) {
+                  const id = args.shift().toLowerCase()
+                  console.log(id)
+                  const api = require('../lib/api')
+                  api.get(`/applications/720987257733120080/commands/${id}`)
+                    .then(json => {
+                      log.info(json)
+                      sender.send(b.channel, 'see console')
+                    })
+                    .catch(err => {
+                      log.fatal('ERROR', err)
+                    })
+                }
                 return
               } // case 'show'
+
+              case 'delete': {
+                if (args.length) {
+                  const id = args.shift().toLowerCase()
+                  console.log(id)
+                  const api = require('../lib/api')
+                  api.delete(`/applications/720987257733120080/commands/${id}`)
+                    .then(json => {
+                      log.info(json)
+                      sender.send(b.channel, 'see console')
+                    })
+                    .catch(err => {
+                      log.fatal('ERROR', err)
+                    })
+                }
+                return
+              } // case 'delete'
             } // switch
           }
           sender.send(b.channel, 'slash!')

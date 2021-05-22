@@ -17,29 +17,24 @@ class Api {
     return this.send('post', apiName, json)
   }
 
+  delete (apiName) {
+    return this.send('delete', apiName)
+  }
+
   send (method, apiName, json) {
     const options = {
       uri: this.urlBase + apiName,
+      method: method,
       headers: {
         'Content-type': 'application/json',
         Authorization: 'Bot ' + this.token
       },
       json: json
     }
-
-    let call
-    switch (method) {
-      case 'get':
-        call = request.get
-        break
-      case 'post':
-        call = request.post
-        break
-    }
     log.debug(method, options)
 
     return new Promise((resolve, reject) => {
-      call(options, (err, res, body) => {
+      request(options, (err, res, body) => {
         log.debug('status code', res.statusCode)
         if (err) {
           reject(err.message)
@@ -47,7 +42,9 @@ class Api {
           reject(res.statusMessage)
         } else {
           let json = body
-          if (typeof body === 'string') {
+          if (!json) {
+            json = {}
+          } else if (typeof body === 'string') {
             json = JSON.parse(body)
           }
           resolve(json)

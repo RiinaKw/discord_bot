@@ -70,7 +70,7 @@ const json = {
 }
 */
 const json = {
-  name: 'not-implemented',
+  name: 'not-implemented-2',
   description: 'Example of not-implemented slash command'
 }
 
