@@ -103,15 +103,6 @@ class Behavior {
     const command = args.shift().toLowerCase()
 
     if (command === 'bot') {
-      /*
-      if (match = body.match(/^bot\s+?(?<command>.*?)$/)) {
-        let command = match.groups.command;
-        this.command(command);
-        console.log(`command : ${command}`);
-      } else {
-        this.help();
-      }
-      */
       if (args.length) {
         log.info('command : ', args)
         this.command(args)
