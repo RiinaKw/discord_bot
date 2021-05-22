@@ -1,46 +1,46 @@
-'use strict';
+'use strict'
 
-let connection;
+let connection
 
 require('../model/database')
-.then(conn => {
-  connection = conn;
-  console.log('connect to mariadb');
-})
-.catch(err => {
-  throw err;
-});
+  .then(conn => {
+    connection = conn
+    console.log('connect to mariadb')
+  })
+  .catch(err => {
+    throw err
+  })
 
 module.exports = class Reminder {
-  static selectExpired(user_id) {
-    if (user_id === undefined) {
-      return connection.query(`SELECT * FROM reminders WHERE deadline <= NOW();`);
+  static selectExpired (userId) {
+    if (userId === undefined) {
+      return connection.query('SELECT * FROM reminders WHERE deadline <= NOW();')
     } else {
       return connection.query(
-        `SELECT * FROM reminders WHERE user_id = ? AND deadline <= NOW();`,
-        [ user_id ]
-      );
+        'SELECT * FROM reminders WHERE user_id = ? AND deadline <= NOW();',
+        [userId]
+      )
     }
   } // function selectExpired()
 
-  static selectAll(user_id) {
+  static selectAll (userId) {
     return connection.query(
-      `SELECT * FROM reminders WHERE user_id = ?;`,
-      [ user_id ]
-    );
+      'SELECT * FROM reminders WHERE user_id = ?;',
+      [userId]
+    )
   }
 
-  static insert(user_id, name, deadline) {
+  static insert (userId, name, deadline) {
     return connection.query(
-      `INSERT INTO reminders(user_id, name, deadline) VALUES(?, ?, ?);`,
-      [ user_id, name, deadline ]
-    );
+      'INSERT INTO reminders(user_id, name, deadline) VALUES(?, ?, ?);',
+      [userId, name, deadline]
+    )
   } // function insert()
 
-  static delete(user_id, name) {
+  static delete (userId, name) {
     return connection.query(
-      `DELETE FROM reminders WHERE user_id = ? AND name = ?;`,
-      [ user_id, name ]
-    );
+      'DELETE FROM reminders WHERE user_id = ? AND name = ?;',
+      [userId, name]
+    )
   } // function delete()
-}; // class Reminder
+} // class Reminder

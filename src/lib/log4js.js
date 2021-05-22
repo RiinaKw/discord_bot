@@ -1,36 +1,36 @@
-'use strict';
+'use strict'
 
 const log4js = require('log4js')
-const log = log4js.getLogger();
+const log = log4js.getLogger()
 
 log4js.configure({
   appenders: {
     console: {
-      type:     "console"
+      type: 'console'
     },
     system: {
-      type:        "dateFile",
-      category:    "system",
-      filename:    "logs/system.log",
-      pattern:     "-yyyy-MM-dd",
+      type: 'dateFile',
+      category: 'system',
+      filename: 'logs/system.log',
+      pattern: '-yyyy-MM-dd',
       keepFileExt: true
     },
     wrapErr: {
-      type:     "logLevelFilter",
-      appender: "system",
-      level:    "debug"
+      type: 'logLevelFilter',
+      appender: 'system',
+      level: 'debug'
     }
   },
   categories: {
     default: {
       appenders: [
-        "console",
-        "wrapErr"
+        'console',
+        'wrapErr'
       ],
-      level: "all"
+      level: 'all'
     }
   }
-});
+})
 
 // sample
 /*
@@ -42,4 +42,4 @@ log.error('Some error messages')
 log.fatal('Some fatal messages')
 */
 
-module.exports = log;
+module.exports = log

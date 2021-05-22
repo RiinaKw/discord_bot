@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-const mariadb = require('mariadb');
+const mariadb = require('mariadb')
 const dbparams = require('../config/database')
-const pool = mariadb.createPool(dbparams);
+const pool = mariadb.createPool(dbparams)
 
-let promise = pool.getConnection();
+const promise = pool.getConnection()
 
-module.exports = promise;
+module.exports = promise

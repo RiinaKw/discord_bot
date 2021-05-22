@@ -1,52 +1,56 @@
-'use strict';
+'use strict'
 
-const moment = require('moment');
-const sender = require('./message');
-const log = require('./lib/log4js');;
+const moment = require('moment')
+const sender = require('./message')
+const log = require('./lib/log4js')
 
-let app;
+let app
 
 module.exports = a => {
-  app = a;
-};
+  app = a
+}
 
 class Behavior {
-  init(user, channel) {
+  init (user, channel) {
+    this.channel = channel
+    // this.timeoutId;
+    this.intervalPerMinutes = app.defaultIntervalMinutes()
+    // this.intervalNextMinutes;
+    // this.intervalNextSeconds;
+    // this.prevIntervalTime;
+    this.interval(true)
 
-    this.channel = channel;
-    this.timeoutId;
-    this.intervalPerMinutes = app.defaultIntervalMinutes();
-    this.intervalNextMinutes;
-    this.intervalNextSeconds;
-    this.prevIntervalTime;
-    this.interval(true);
-
-    app.init(user, channel);
+    app.init(user, channel)
   } // function init()
 
-  channelName() {
-    return app.channelName();
+  channelName () {
+    return app.channelName()
   } // function channelName()
 
-  interval(boot) {
-    if (! boot) {
-      app.interval(this.channel);
+  interval (boot) {
+    if (!boot) {
+      app.interval(this.channel)
     }
 
-    let time = moment();
-    this.prevIntervalTime = time;
-    this.intervalNextMinutes = this.intervalPerMinutes - parseInt( time.minutes() % this.intervalPerMinutes );
-    if ( this.intervalNextMinutes <= 0 ) {
-      this.intervalNextMinutes = this.intervalPerMinutes;
+    const time = moment()
+    this.prevIntervalTime = time
+    this.intervalNextMinutes =
+      this.intervalPerMinutes -
+      parseInt(time.minutes() % this.intervalPerMinutes)
+    if (this.intervalNextMinutes <= 0) {
+      this.intervalNextMinutes = this.intervalPerMinutes
     }
-    this.intervalNextSeconds = (this.intervalNextMinutes * 60 - time.seconds());
-    clearTimeout(this.timeoutId);
-    this.timeoutId = setTimeout(() => { this.interval(false) }, this.intervalNextSeconds * 1000);
+    this.intervalNextSeconds = (this.intervalNextMinutes * 60 - time.seconds())
+    clearTimeout(this.timeoutId)
+    this.timeoutId = setTimeout(
+      () => { this.interval(false) },
+      this.intervalNextSeconds * 1000
+    )
   } // function interval()
 
-  nextInterval() {
-    let next = this.prevIntervalTime.add(this.intervalNextSeconds, 'seconds');
-    return next.format('YYYY-MM-DD HH:mm:ss');
+  nextInterval () {
+    const next = this.prevIntervalTime.add(this.intervalNextSeconds, 'seconds')
+    return next.format('YYYY-MM-DD HH:mm:ss')
   } // function nextInterval()
 
   // bot command
@@ -110,11 +114,11 @@ class Behavior {
         this.help()
       }
     } else {
-      if (! app.reply(message, body)) {
+      if (!app.reply(message, body)) {
         app.replyDefault(message, body)
       }
     }
   } // function mention()
 } // class Behavior
 
-require('./bot')(new Behavior);
+require('./bot')(new Behavior())
