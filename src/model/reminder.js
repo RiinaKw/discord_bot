@@ -1,16 +1,9 @@
 'use strict'
 
-const process = require('../lib/process')
-
 let connection
-
-require('./database')
+require('../lib/database')
   .then(conn => {
     connection = conn
-    console.log('connect to mariadb')
-  })
-  .catch(err => {
-    process.shutdown(err)
   })
 
 module.exports = class Reminder {
