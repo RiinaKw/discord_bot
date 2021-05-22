@@ -80,12 +80,14 @@ class Behavior {
     }
   } // function command()
 
-  help() {
-    let content = `bot command\n`
-      + `bot interval : Display automatic notification interval as minutes.\n`
-      + `bot interval (5|10|15|20|30|60) : Change the automatic notification intercal, specify the minutes.`
-      + `bot interval next : Show next time for the automatic notification.`;
-    sender.send(this.channel, content);
+  help () {
+    const content = '**bot command**\n' +
+      '`bot interval` : Display automatic notification interval as minutes.\n' +
+      '  `bot interval (5|10|15|20|30|60)` : \n' +
+      '    Change the automatic notification intercal, specify the minutes.\n' +
+      '  `bot interval next` : \n' +
+      '    Show next time for the automatic notification.'
+    sender.send(this.channel, content)
   } // function help()
 
   message (message) {
