@@ -12,8 +12,8 @@ Make sure to create following files.
 The following commands only work for the user who responded.
 * ``@bot reminder all`` : Show all registered reminders.
 * ``@bot reminder expired`` : Show expired registered reminders.
-* ``@bot register reminder [title] [datetime]`` : Register reminder with datetime as deadline.
-* ``@bot delete reminder [title]`` : Delete reminder which title matched
+* ``@bot reminder register [title] [datetime]`` : Register reminder with datetime as deadline.
+* ``@bot reminder delete [title]`` : Delete reminder which title matched
 
 ### Bot Command
 The following commands affect the overall behavior.  
