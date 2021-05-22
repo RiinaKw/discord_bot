@@ -2,6 +2,7 @@
 
 const moment = require('moment');
 const sender = require('./message');
+const log = require('./lib/log4js');;
 
 let app;
 
@@ -50,6 +51,7 @@ class Behavior {
 
   // bot command
   command(command) {
+    log.info(command);
     let match;
     if (match = command.match(/^interval(\s|$)/)) {
 
