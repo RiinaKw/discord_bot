@@ -36,6 +36,29 @@ client.on('ready', () => {
   behavior.init(client)
   log.debug(`bot id: ${client.user.id}`)
   log.debug('Ready...')
+
+  client.ws.on('INTERACTION_CREATE', async interaction => {
+    const command = interaction.data.name.toLowerCase()
+    const args = interaction.data.options
+    console.log(args)
+
+    try {
+      switch (command) {
+        case 'blep':
+          client.api.interactions(interaction.id, interaction.token).callback.post({
+            data: {
+              type: 4,
+              data: {
+                content: 'Hello World!'
+              }
+            }
+          })
+          break
+      }
+    } catch (e) {
+      log.fatal(e)
+    }
+  })
 }) // ready
 
 client.on('message', message => {
