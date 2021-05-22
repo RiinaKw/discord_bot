@@ -10,7 +10,15 @@ module.exports = a => {
 }
 
 class Behavior {
-  init (client, channel) {
+  init (client) {
+    const channelName = app.channelName()
+    let channel = client.channels.cache.find(ch => ch.name === channelName)
+    if (!channel) {
+      // default channel : first TextChannel
+      channel = client.channels.cache.find(ch => ch.constructor.name === 'TextChannel')
+    }
+    log.debug(`default channel : ${channel.name}`)
+
     this.channel = channel
     // this.timeoutId;
     this.intervalPerMinutes = app.defaultIntervalMinutes()
@@ -22,10 +30,6 @@ class Behavior {
     client.behavior = this
     app.init(client, channel)
   } // function init()
-
-  channelName () {
-    return app.channelName()
-  } // function channelName()
 
   interval (boot) {
     if (!boot) {

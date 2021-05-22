@@ -9,6 +9,7 @@ const reminder = require('../model/reminder')
 
 class App {
   init (client, channel) {
+    config.channel = channel.name
     sender.send(channel, 'Ready go.')
     if (config.activity) {
       client.user.setPresence({ activity: config.activity })

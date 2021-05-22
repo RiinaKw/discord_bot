@@ -25,9 +25,7 @@ for (const file of commandFiles) {
 }
 
 client.on('ready', () => {
-  const channelName = behavior.channelName()
-  const channel = client.channels.cache.find(ch => ch.name === channelName)
-  behavior.init(client, channel)
+  behavior.init(client)
   console.log(`bot id: ${client.user.id}`)
   console.log('Ready...')
 }) // ready

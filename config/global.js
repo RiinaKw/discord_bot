@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-  channel: 'bot_test',
+  channel: 'general',
   interval: 60,
   activity: {
     name: 'discord.js ',
