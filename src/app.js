@@ -102,6 +102,10 @@ class App {
         sender.reply(message, `[error] fail to accept.`);
       });
       return true;
+    } else if (match = body.match(/reboot/)) {
+        sender.reply(message, `reboot`);
+        boo();
+        return true;
     }
   } // function reply()
 
