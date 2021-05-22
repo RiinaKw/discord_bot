@@ -43,45 +43,44 @@ module.exports = {
         case 'slash': {
           if (args.length) {
             const subcommand = args.shift().toLowerCase()
-            sender.send(b.channel, 'slash! will do ' + subcommand)
 
             switch (subcommand) {
               case 'list': {
-                const url = 'https://discord.com/api/v8/applications/720987257733120080/commands'
-                const token = require('../../config/token')
-
-                const options = {
-                  uri: url,
-                  headers: {
-                    'Content-type': 'application/json',
-                    Authorization: 'Bot ' + token
-                  }
-                }
-                console.log(options)
-
-                const request = require('request')
-                request.get(options, function (err, res, body) {
-                  if (err) {
-                    console.log('Error: ' + err.message)
-                    return
-                  }
-
-                  JSON.parse(body).forEach(command => {
-                    console.log(command)
-                    const content = [
-                      `**${command.name}** :`,
-                      `  id : ${command.id}`,
-                      `  description : ${command.description}`
-                    ]
-                    sender.send(b.channel, content)
+                const api = require('../lib/api')
+                api.get('/applications/720987257733120080/commands')
+                  .then(json => {
+                    sender.send(b.channel, '**slash command list**')
+                    json.forEach(command => {
+                      // console.log(command)
+                      const content = [
+                        `  **${command.name}** :`,
+                        `    id : ${command.id}`,
+                        `    description : ${command.description}`
+                      ]
+                      sender.send(b.channel, content)
+                    })
                   })
-                })
+                  .catch(err => {
+                    log.fatal('ERROR', err)
+                  })
                 return
-              }
-            }
-          } else {
-            sender.send(b.channel, 'slash!')
+              } // case 'list'
+
+              case 'show': {
+                const api = require('../lib/api')
+                api.get('/applications/720987257733120080/commands/845688492004868146')
+                  .then(json => {
+                    log.info(json)
+                    sender.send(b.channel, 'see console')
+                  })
+                  .catch(err => {
+                    log.fatal('ERROR', err)
+                  })
+                return
+              } // case 'show'
+            } // switch
           }
+          sender.send(b.channel, 'slash!')
           return
         }
       } // switch

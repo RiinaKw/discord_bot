@@ -2,8 +2,6 @@
 
 console.log('ここ読め : https://discord.com/developers/docs/interactions/slash-commands')
 
-const request = require('request')
-
 /*
 const json = {
   name: 'blep',
@@ -84,22 +82,11 @@ const json = {
 }
 */
 
-const url = 'https://discord.com/api/v8/applications/720987257733120080/commands'
-const token = require('../config/token')
-
-const options = {
-  uri: url,
-  headers: {
-    'Content-type': 'application/json',
-    Authorization: 'Bot ' + token
-  },
-  json: json
-}
-
-request.post(options, function (err, res, body) {
-  if (err) {
-    console.log('Error: ' + err.message)
-    return
-  }
-  console.log(body)
-})
+const api = require('./lib/api')
+api.post('/applications/720987257733120080/commands', json)
+  .then(result => {
+    console.log(result)
+  })
+  .catch(err => {
+    console.log('ERROR', err)
+  })
