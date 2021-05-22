@@ -1,10 +1,10 @@
 'use strict'
 
-const process = require('../src/lib/process')
+const process = require('../lib/process')
 
 let connection
 
-require('../model/database')
+require('./database')
   .then(conn => {
     connection = conn
     console.log('connect to mariadb')

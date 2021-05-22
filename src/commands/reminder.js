@@ -1,9 +1,9 @@
 'use strict'
 
+const moment = require('moment')
 const sender = require('../lib/message')
 const log = require('../lib/log4js')
-const moment = require('moment')
-const reminder = require('../../model/reminder')
+const reminder = require('../model/reminder')
 
 module.exports = {
   name: 'reminder',
@@ -53,11 +53,11 @@ module.exports = {
 
             reminder.insert(message.author.id, title, deadlineFormatted)
               .then(rows => {
-                console.log(rows)
+                log.debug(rows)
                 sender.reply(message, 'accepted.')
               })
               .catch(err => {
-                console.log(err)
+                log.fatal(err)
                 sender.reply(message, '[error] fail to accept.')
               })
             return
@@ -69,11 +69,11 @@ module.exports = {
             const [title] = args
             reminder.delete(message.author.id, title)
               .then(rows => {
-                console.log(rows)
+                log.debug(rows)
                 sender.reply(message, 'accepted.')
               })
               .catch(err => {
-                console.log(err)
+                log.fatal(err)
                 sender.reply(message, '[error] fail to accept.')
               })
             return

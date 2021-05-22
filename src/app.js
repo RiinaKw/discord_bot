@@ -4,8 +4,9 @@ const moment = require('moment')
 const sender = require('./lib/message')
 const log = require('./lib/log4js')
 
+const reminder = require('./model/reminder')
+
 const config = require('../config/global')
-const reminder = require('../model/reminder')
 
 class App {
   init (client, channel) {
@@ -32,7 +33,7 @@ class App {
     reminder.selectExpired()
       .then(rows => {
         rows.forEach(row => {
-          log.debug(row)
+          log.trace(row)
           const deadline = moment(row.deadline).format('YYYY-MM-DD HH:mm:ss')
           sender.send(channel, `reminder : ${row.name}, deadline is ${deadline}`, {
             reply: row.user_id

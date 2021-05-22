@@ -3,7 +3,7 @@
 const mariadb = require('mariadb')
 
 try {
-  const dbparams = require('../config/database')
+  const dbparams = require('../../config/database')
   if (!dbparams.database) {
     throw new Error('no database selected')
   }
