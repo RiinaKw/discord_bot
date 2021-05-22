@@ -1,18 +1,17 @@
 'use strict'
 
 const sender = require('../message')
+const log = require('../lib/log4js')
 
 module.exports = {
   name: 'reboot',
   description: 'shutdown and reboot this bot (needs ADMINISTRATOR permission)',
   permissions: 'ADMINISTRATOR',
   execute (message, args) {
-    const a = message.client.app
     sender.send(message.channel, 'rebooting...')
-
-    // trigger error, non-existing function
+    log.fatal('reboot')
     setTimeout(
-      () => { a.killmyself() },
+      () => { process.exit(0) },
       1000
     )
   }
