@@ -11,7 +11,7 @@ module.exports = a => {
 }
 
 class Behavior {
-  init (user, channel) {
+  init (client, channel) {
     this.channel = channel
     // this.timeoutId;
     this.intervalPerMinutes = app.defaultIntervalMinutes()
@@ -20,7 +20,8 @@ class Behavior {
     // this.prevIntervalTime;
     this.interval(true)
 
-    app.init(user, channel)
+    client.behavior = this
+    app.init(client, channel)
   } // function init()
 
   channelName () {
@@ -53,7 +54,7 @@ class Behavior {
     return next.format('YYYY-MM-DD HH:mm:ss')
   } // function nextInterval()
 
-  discordCommand (message) {
+  command (message) {
     const client = message.client
     const content = message.content
     const match = content.match(/^<@!?\d+>\s+(?<body>.*)$/)
@@ -80,47 +81,6 @@ class Behavior {
     return false
   }
 
-  // bot command
-  command (args) {
-    const subcommand = args.shift().toLowerCase()
-    if (subcommand === 'interval') {
-      if (args.length) {
-        const amount = parseInt(args.shift())
-        if (!isNaN(amount)) {
-          // change interval time
-          this.intervalPerMinutes = amount
-          this.interval(true)
-          sender.send(
-            this.channel,
-            `bot mode : set interval to ${this.intervalPerMinutes} minutes`
-          )
-          log.info(`bot interval changed : ${this.intervalPerMinutes} minutes`)
-          return
-        }
-      }
-      // show current interval
-      const next = this.nextInterval()
-      sender.send(
-        this.channel,
-        'bot mode :\n' +
-        `  current interval is ${this.intervalPerMinutes} minutes\n` +
-        `  next interval is ${next}`
-      )
-    } else {
-      this.help()
-    }
-  } // function command()
-
-  help () {
-    const content = '**bot command**\n' +
-      '`bot interval` : Display automatic notification interval as minutes.\n' +
-      '  `bot interval (5|10|15|20|30|60)` : \n' +
-      '    Change the automatic notification intercal, specify the minutes.\n' +
-      '  `bot interval next` : \n' +
-      '    Show next time for the automatic notification.'
-    sender.send(this.channel, content)
-  } // function help()
-
   message (message) {
     app.message(message)
   } // function message()
@@ -130,20 +90,8 @@ class Behavior {
     const match = content.match(/^<@!?\d+>\s+(?<body>.*)$/)
     const body = match.groups.body
 
-    const args = body.split(/\s+/)
-    const command = args.shift().toLowerCase()
-
-    if (command === 'bot') {
-      if (args.length) {
-        log.info('command : ', args)
-        this.command(args)
-      } else {
-        this.help()
-      }
-    } else {
-      if (!app.reply(message, body)) {
-        app.replyDefault(message, body)
-      }
+    if (!app.reply(message, body)) {
+      app.replyDefault(message, body)
     }
   } // function mention()
 } // class Behavior

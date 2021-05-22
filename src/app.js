@@ -8,11 +8,12 @@ const config = require('../config/global')
 const reminder = require('../model/reminder')
 
 class App {
-  init (user, channel) {
+  init (client, channel) {
     sender.send(channel, 'Ready go.')
     if (config.activity) {
-      user.setPresence({ activity: config.activity })
+      client.user.setPresence({ activity: config.activity })
     }
+    client.app = this
   } // function init()
 
   channelName () {

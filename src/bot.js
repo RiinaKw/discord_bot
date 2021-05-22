@@ -27,7 +27,7 @@ for (const file of commandFiles) {
 client.on('ready', () => {
   const channelName = behavior.channelName()
   const channel = client.channels.cache.find(ch => ch.name === channelName)
-  behavior.init(client.user, channel)
+  behavior.init(client, channel)
   console.log(`bot id: ${client.user.id}`)
   console.log('Ready...')
 }) // ready
@@ -36,7 +36,7 @@ client.on('message', message => {
   if (!message.author.bot) {
     const isMentionToSelf = message.mentions.users.find(ch => ch.id === client.user.id)
     if (isMentionToSelf) {
-      if (!behavior.discordCommand(message)) {
+      if (!behavior.command(message)) {
         behavior.mention(message)
       }
     } else {
