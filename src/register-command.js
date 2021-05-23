@@ -79,7 +79,6 @@ defs.push(
   {
     name: 'admin',
     description: 'Execute a admin command',
-    permission: 32,
     options: [
       {
         name: 'command',
