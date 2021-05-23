@@ -41,65 +41,53 @@ defs.push(
   }
 )
 */
-/*
+
 defs.push(
   {
     name: 'bot',
     description: 'Execute a bot command',
     options: [
       {
-        name: 'command',
-        description: 'sub command',
-        type: 2,
+        name: 'interval',
+        description: 'Manage bot interval',
+        type: 1,
         options: [
           {
-            name: 'interval',
-            description: 'Manage bot interval',
-            type: 1,
-            options: [
-              {
-                name: 'minutes',
-                description: 'interval value',
-                type: 4,
-                required: false
-              }
-            ]
-          },
-          {
-            name: 'help',
-            description: 'Show help of bot command',
-            type: 1
+            name: 'minutes',
+            description: 'interval value',
+            type: 4,
+            required: false
           }
         ]
+      },
+      {
+        name: 'help',
+        description: 'Show help of bot command',
+        type: 1
       }
     ]
   }
 )
-*/
-/*
+
 defs.push(
   {
     name: 'admin',
     description: 'Execute a admin command',
-    default_permission: false,
-    permission: 32,
+    //permission: 2048,
     options: [
       {
-        name: 'command',
-        description: 'sub command',
-        type: 2,
-        options: [
-          {
-            name: 'reboot',
-            description: 'Reboot this bot',
-            type: 1
-          }
-        ]
+        name: 'reboot',
+        description: 'Reboot this bot',
+        type: 1
+      },
+      {
+        name: 'more',
+        description: 'more command',
+        type: 1
       }
     ]
   }
 )
-*/
 
 defs.push(
   {
@@ -107,40 +95,33 @@ defs.push(
     description: 'Manage slash commands',
     options: [
       {
-        name: 'command',
-        description: 'sub command',
-        type: 2,
+        name: 'list',
+        description: 'Show all slash commands',
+        type: 1
+      },
+      {
+        name: 'detail',
+        description: 'Show detail of slash command',
+        type: 1,
         options: [
           {
-            name: 'list',
-            description: 'Show all slash commands',
-            type: 1
-          },
+            name: 'name',
+            description: 'command name',
+            type: 3,
+            required: true
+          }
+        ]
+      },
+      {
+        name: 'delete',
+        description: 'delete slash command',
+        type: 1,
+        options: [
           {
-            name: 'detail',
-            description: 'Show detail of slash command',
-            type: 1,
-            options: [
-              {
-                name: 'name',
-                description: 'command name',
-                type: 3,
-                required: true
-              }
-            ]
-          },
-          {
-            name: 'delete',
-            description: 'delete slash command',
-            type: 1,
-            options: [
-              {
-                name: 'name',
-                description: 'command name',
-                type: 3,
-                required: true
-              }
-            ]
+            name: 'name',
+            description: 'command name',
+            type: 3,
+            required: true
           }
         ]
       }

@@ -5,26 +5,23 @@ const config = require('../model/config')
 
 module.exports = {
   execute (client, args) {
-    const command = args.find(item => item.name === 'command')
-    const subcommand = command.options[0].name
-    switch (subcommand) {
+    const subcommand = args[0]
+    switch (subcommand.name) {
       case 'interval': {
         const b = client.behavior
-        const interval = command.options.find(item => item.name === 'interval')
-        log.fatal('interval', interval)
-        if (interval.options) {
-          const minutes = interval.options.find(item => item.name === 'minutes')
-          if (minutes.value <= 0) {
+        if (subcommand.options) {
+          const minutes = subcommand.options.find(item => item.name === 'minutes').value
+          if (minutes <= 0) {
             throw new Error('**bot interval error** : minutes must be greater than zero')
           }
 
           // change interval time
-          b.intervalPerMinutes = minutes.value
+          b.intervalPerMinutes = minutes
           b.interval(true)
-          config.update('interval', minutes.value)
+          config.update('interval', minutes)
 
-          log.info(`bot interval changed : ${minutes.value} minutes`)
-          return `**bot interval** : set to ${minutes.value} minutes`
+          log.info(`bot interval changed : ${minutes} minutes`)
+          return `**bot interval** : set to ${minutes} minutes`
         } else {
           // show current interval
           const next = b.nextInterval()
@@ -36,7 +33,7 @@ module.exports = {
         }
       }
       default:
-        return `try to execute **bot ${subcommand}**`
+        return `unknwon command \`bot ${subcommand.name}\``
     }
   }
 }

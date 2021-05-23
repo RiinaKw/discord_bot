@@ -51,7 +51,7 @@ client.on('ready', () => {
       try {
         slash = require('./slashes/' + command)
       } catch (e) {
-        throw new Error(`unknown slash command : ${command}`)
+        throw new Error(`unknown slash command : \`${command}\``)
       }
       let content = await slash.execute(client, args)
       if (typeof content !== 'string') {

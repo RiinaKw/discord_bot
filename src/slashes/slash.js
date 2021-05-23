@@ -25,8 +25,7 @@ module.exports = {
 
   async execute (client, args) {
     const appId = client.user.id
-    const command = args.find(item => item.name === 'command')
-    const subcommand = command.options[0]
+    const subcommand = args[0]
     switch (subcommand.name) {
       case 'list': {
         return await this.list(appId)
@@ -98,7 +97,7 @@ module.exports = {
       } // case 'delete'
 
       default:
-        return `unknwon subcommand **${subcommand.name}**`
+        return `unknwon command \`slash ${subcommand.name}\``
     }
   }
 }
