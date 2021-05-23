@@ -47,15 +47,13 @@ defs.push(
     description: 'Execute a bot command',
     options: [
       {
-        name: 'subcommand',
+        name: 'command',
         description: 'sub command',
-        type: 3,
-        required: true,
-        choices: [
+        type: 2,
+        options: [
           {
             name: 'interval',
-            value: 'sub_interval',
-            description: 'Execute bot interval',
+            description: 'Manage bot interval',
             type: 1,
             options: [
               {
@@ -67,9 +65,8 @@ defs.push(
             ]
           },
           {
-            name: 'dummy',
-            value: 'sub_dummy',
-            description: 'Dummy subcommand',
+            name: 'help',
+            description: 'Show help of bot command',
             type: 1
           }
         ]

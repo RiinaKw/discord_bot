@@ -44,7 +44,7 @@ client.on('ready', () => {
     const user = interaction.member.user
     const username = `${user.username}#${user.discriminator}`
     log.debug(`${username} used slash command ${command}`)
-    log.debug('args : ', args)
+    log.debug(`${command} : `, args)
 
     try {
       let slash

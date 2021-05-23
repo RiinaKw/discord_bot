@@ -5,11 +5,13 @@ const config = require('../model/config')
 
 module.exports = {
   execute (client, interaction, args) {
-    const subcommand = args.find(item => item.name === 'subcommand')
-    switch (subcommand.options[0].name) {
+    const command = args.find(item => item.name === 'command')
+    const subcommand = command.options[0].name
+    switch (subcommand) {
       case 'interval': {
         const b = client.behavior
-        const interval = subcommand.options.find(item => item.name === 'interval')
+        const interval = command.options.find(item => item.name === 'interval')
+        log.fatal('interval', interval)
         if (interval.options) {
           const minutes = interval.options.find(item => item.name === 'minutes')
 
@@ -46,12 +48,12 @@ module.exports = {
         }
         break
       }
-      case 'dummy':
+      default:
         client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {
             type: 4,
             data: {
-              content: 'dummy command ' + subcommand
+              content: 'try to execute ' + subcommand
             }
           }
         })
