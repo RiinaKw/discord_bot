@@ -17,6 +17,10 @@ class Api {
     return this.send('post', apiName, json)
   }
 
+  put (apiName, json) {
+    return this.send('put', apiName, json)
+  }
+
   delete (apiName) {
     return this.send('delete', apiName)
   }

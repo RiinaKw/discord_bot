@@ -14,6 +14,9 @@ module.exports = {
         log.fatal('interval', interval)
         if (interval.options) {
           const minutes = interval.options.find(item => item.name === 'minutes')
+          if (minutes.value <= 0) {
+            throw new Error('minutes must be greater than zero')
+          }
 
           // change interval time
           b.intervalPerMinutes = minutes.value
@@ -21,7 +24,7 @@ module.exports = {
           config.update('interval', minutes.value)
 
           log.info(`bot interval changed : ${minutes.value} minutes`)
-          return `bot mode : set interval to ${minutes.value} minutes`
+          return `**bot interval** : set to ${minutes.value} minutes`
         } else {
           // show current interval
           const next = b.nextInterval()
@@ -33,7 +36,7 @@ module.exports = {
         }
       }
       default:
-        return 'try to execute ' + subcommand
+        return `try to execute **bot ${subcommand}**`
     }
   }
 }

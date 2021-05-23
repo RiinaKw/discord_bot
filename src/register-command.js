@@ -40,7 +40,7 @@ defs.push(
   }
 )
 */
-
+/*
 defs.push(
   {
     name: 'bot',
@@ -67,6 +67,28 @@ defs.push(
           {
             name: 'help',
             description: 'Show help of bot command',
+            type: 1
+          }
+        ]
+      }
+    ]
+  }
+)
+*/
+defs.push(
+  {
+    name: 'admin',
+    description: 'Execute a admin command',
+    permission: 2048,
+    options: [
+      {
+        name: 'command',
+        description: 'sub command',
+        type: 2,
+        options: [
+          {
+            name: 'reboot',
+            description: 'Reboot this bot',
             type: 1
           }
         ]
@@ -106,9 +128,29 @@ client.on('ready', () => {
       .then(result => {
         console.log('-------------------------')
         log.info(result)
+
+        /*
+        const commandId = result.id
+        const json = {
+          permissions: [
+            {
+              id: 'ADMINISTRATOR',
+              type: 1,
+              permission: true
+            }
+          ]
+        }
+        api.put(`/applications/${appId}/commands/${commandId}/permissions`, json)
+          .then(result => {
+            log.info(result)
+          })
+          .catch(e => {
+            log.fatal('ERROR', e)
+          })
+          */
       })
-      .catch(err => {
-        log.fatal('ERROR', err)
+      .catch(e => {
+        log.fatal('ERROR', e)
       })
   })
   client.destroy()
