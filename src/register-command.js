@@ -49,10 +49,12 @@ defs.push(
       {
         name: 'subcommand',
         description: 'sub command',
-        type: 2,
-        options: [
+        type: 3,
+        required: true,
+        choices: [
           {
             name: 'interval',
+            value: 'sub_interval',
             description: 'Execute bot interval',
             type: 1,
             options: [
@@ -66,6 +68,7 @@ defs.push(
           },
           {
             name: 'dummy',
+            value: 'sub_dummy',
             description: 'Dummy subcommand',
             type: 1
           }
@@ -74,22 +77,42 @@ defs.push(
     ]
   }
 )
-
+/*
 defs.push(
   {
     name: 'not-implemented',
     description: 'Example of not-implemented slash command'
   }
 )
+*/
 
-const api = require('./lib/api')
-defs.forEach(def => {
-  api.post('/applications/720987257733120080/commands', def)
-    .then(result => {
-      console.log('-------------------------')
-      console.log(result)
-    })
-    .catch(err => {
-      console.log('ERROR', err)
-    })
+const process = require('./lib/process')
+const log = require('./lib/log4js')
+
+const Discord = require('discord.js')
+const client = new Discord.Client()
+
+try {
+  const token = require('../config/token')
+  client.login(token)
+} catch (e) {
+  client.destroy()
+  process.shutdown(e)
+}
+
+client.on('ready', () => {
+  const appId = client.user.id
+  const api = require('./lib/api')
+
+  defs.forEach(def => {
+    api.post(`/applications/${appId}/commands`, def)
+      .then(result => {
+        console.log('-------------------------')
+        log.info(result)
+      })
+      .catch(err => {
+        log.fatal('ERROR', err)
+      })
+  })
+  client.destroy()
 })

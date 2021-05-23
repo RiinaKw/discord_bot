@@ -42,12 +42,13 @@ module.exports = {
 
         case 'slash': {
           if (args.length) {
+            const appId = message.client.user.id
             const subcommand = args.shift().toLowerCase()
 
             switch (subcommand) {
               case 'list': {
                 const api = require('../lib/api')
-                api.get('/applications/720987257733120080/commands')
+                api.get(`/applications/${appId}/commands`)
                   .then(json => {
                     sender.send(b.channel, '**slash command list**')
                     json.forEach(command => {
@@ -71,7 +72,7 @@ module.exports = {
                   const id = args.shift().toLowerCase()
                   console.log(id)
                   const api = require('../lib/api')
-                  api.get(`/applications/720987257733120080/commands/${id}`)
+                  api.get(`/applications/${appId}/commands/${id}`)
                     .then(json => {
                       log.info(json)
                       sender.send(b.channel, 'see console')
@@ -88,7 +89,7 @@ module.exports = {
                   const id = args.shift().toLowerCase()
                   console.log(id)
                   const api = require('../lib/api')
-                  api.delete(`/applications/720987257733120080/commands/${id}`)
+                  api.delete(`/applications/${appId}/commands/${id}`)
                     .then(json => {
                       log.info(json)
                       sender.send(b.channel, 'see console')
