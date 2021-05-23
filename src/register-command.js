@@ -138,46 +138,6 @@ defs.push(
 
 defs.push(
   {
-    name: 'slash',
-    description: 'Manage slash commands',
-    options: [
-      {
-        name: 'list',
-        description: 'Show all slash commands',
-        type: OptionType.SUB_COMMAND
-      },
-      {
-        name: 'detail',
-        description: 'Show detail of slash command',
-        type: OptionType.SUB_COMMAND,
-        options: [
-          {
-            name: 'name',
-            description: 'command name',
-            type: OptionType.STRING,
-            required: true
-          }
-        ]
-      },
-      {
-        name: 'delete',
-        description: 'delete slash command',
-        type: OptionType.SUB_COMMAND,
-        options: [
-          {
-            name: 'name',
-            description: 'command name',
-            type: OptionType.STRING,
-            required: true
-          }
-        ]
-      }
-    ]
-  }
-)
-
-defs.push(
-  {
     name: 'not-implemented',
     description: 'Example of not-implemented slash command'
   }
