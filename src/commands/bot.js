@@ -14,30 +14,28 @@ try {
     // with the key as the command name and the value as the exported module
     commands.set(command.name, command)
   })
-} catch (err) {
-  log.fatal()
+} catch (e) {
+  log.fatal(e)
 }
-
-console.log(commands)
 
 module.exports = {
   name: 'bot',
   description: 'bot commands',
-  execute (message, args) {
-    const b = message.client.behavior
+  async execute (message, args) {
     if (args.length) {
       try {
         const name = args.shift().toLowerCase()
         const command = commands.get(name)
+        log.debug(command)
         if (!command) {
           throw new Error(`bot command not found : ${name}`)
         }
-        log.debug(command)
-        command.execute(message, args)
+        const result = await command.execute(message, args)
+        sender.send(message.channel, result)
         return
       } catch (e) {
         log.fatal(e)
-        sender.send(b.channel, e.message)
+        sender.send(message.channel, e.message)
       }
     } // if (args.length)
 
@@ -53,7 +51,14 @@ module.exports = {
     ]
     sender.send(b.channel, content)
     */
+    const content = [
+      '**bot command**'
+    ]
+    commands.forEach(command => {
+      console.log(command)
+      content.push(`\`bot ${command.name}\` : ${command.description}`)
+    })
 
-    message.reply(commands.map(command => command.name).join(', '))
+    message.reply(content)
   }
 }
