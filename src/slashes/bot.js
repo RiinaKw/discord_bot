@@ -4,7 +4,7 @@ const log = require('../lib/log4js')
 const config = require('../model/config')
 
 module.exports = {
-  execute (client, interaction, args) {
+  execute (client, args) {
     const command = args.find(item => item.name === 'command')
     const subcommand = command.options[0].name
     switch (subcommand) {
@@ -20,44 +20,20 @@ module.exports = {
           b.interval(true)
           config.update('interval', minutes.value)
 
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: `bot mode : set interval to ${minutes.value} minutes`
-              }
-            }
-          })
           log.info(`bot interval changed : ${minutes.value} minutes`)
+          return `bot mode : set interval to ${minutes.value} minutes`
         } else {
           // show current interval
           const next = b.nextInterval()
-          const content = [
+          return [
             '**bot interval** :',
             `  current interval is \`${b.intervalPerMinutes} minutes\``,
             `  next interval is \`${next}\``
           ]
-          client.api.interactions(interaction.id, interaction.token).callback.post({
-            data: {
-              type: 4,
-              data: {
-                content: content.join('\n')
-              }
-            }
-          })
         }
-        break
       }
       default:
-        client.api.interactions(interaction.id, interaction.token).callback.post({
-          data: {
-            type: 4,
-            data: {
-              content: 'try to execute ' + subcommand
-            }
-          }
-        })
-        break
+        return 'try to execute ' + subcommand
     }
   }
 }

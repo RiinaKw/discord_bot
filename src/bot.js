@@ -53,7 +53,18 @@ client.on('ready', () => {
       } catch (e) {
         throw new Error(`unknown slash command : ${command}`)
       }
-      slash.execute(client, interaction, args)
+      let content = slash.execute(client, args)
+      if (typeof content !== 'string') {
+        content = content.join('\n')
+      }
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: content
+          }
+        }
+      })
     } catch (e) {
       log.fatal(e)
       client.api.interactions(interaction.id, interaction.token).callback.post({
