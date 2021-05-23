@@ -1,30 +1,16 @@
 'use strict'
 
-const sender = require('../lib/message')
-const log = require('../lib/log4js')
+const sender = require('../../lib/message')
+const log = require('../../lib/log4js')
 
 module.exports = {
-  name: 'bot',
-  description: 'bot commands',
+  name: 'interval',
+  description: 'bot interval commands',
   execute (message, args) {
     const b = message.client.behavior
     if (args.length) {
       const command = args.shift().toLowerCase()
-
-      try {
-        let obj
-        try {
-          obj = require('./bot/' + command)
-        } catch (e) {
-          throw new Error(`bot command not found : ${command}`)
-        }
-        log.debug(obj)
-        obj.execute(message, args)
-      } catch (e) {
-        log.fatal(e)
-        sender.send(b.channel, e.message)
-      }
-      return
+      log.fatal(command)
     } // if (args.length)
 
     // help
@@ -37,5 +23,5 @@ module.exports = {
       '    Show next time for the automatic notification.'
     ]
     sender.send(b.channel, content)
-  }
+  } // execute()
 }
