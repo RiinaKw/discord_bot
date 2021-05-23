@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-  channel: 'general',
+  channel: 'bot_test',
   command_prefix: '$$',
   interval: 60,
   activity: {

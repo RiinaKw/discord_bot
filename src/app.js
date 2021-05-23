@@ -10,9 +10,7 @@ const dbConfig = require('./model/config')
 const config = require('../config/global')
 
 class App {
-  init (client, channel) {
-    config.channel = channel.name
-    sender.send(channel, 'Ready go.')
+  init (client) {
     if (config.activity) {
       client.user.setPresence({ activity: config.activity })
     }
@@ -30,6 +28,10 @@ class App {
         log.debug(`current interval : ${row.value}`)
       })
   } // function init()
+
+  initMessage (client, channel) {
+    sender.send(channel, 'Ready go.')
+  }
 
   channelName () {
     return config.channel || 'general'

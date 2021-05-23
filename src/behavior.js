@@ -14,26 +14,23 @@ module.exports = a => {
 class Behavior {
   init (client) {
     const channelName = app.channelName()
-    let channel = client.channels.cache.find(ch => ch.name === channelName)
-    if (!channel) {
-      // default channel : first TextChannel
-      channel = client.channels.cache.find(ch => ch.constructor.name === 'TextChannel')
-    }
-    log.debug(`default channel : ${channel.name}`)
+    client.guilds.cache.forEach(guild => {
+      let channel = guild.channels.cache.find(ch => ch.name === channelName)
+      if (!channel) {
+        // fallback channel : first TextChannel
+        channel = guild.channels.cache.find(ch => ch.constructor.name === 'TextChannel')
+      }
+      app.initMessage(client, channel)
+    })
 
-    this.channel = channel
-    // this.timeoutId;
     this.intervalPerMinutes = app.defaultIntervalMinutes()
-    // this.intervalNextMinutes;
-    // this.intervalNextSeconds;
-    // this.prevIntervalTime;
     this.interval(true)
 
     // load commands
     this.loadCommand(client)
 
     client.behavior = this
-    app.init(client, channel)
+    app.init(client)
   } // function init()
 
   loadCommand (client) {
