@@ -4,6 +4,7 @@ const moment = require('moment')
 const fs = require('fs')
 const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
+const config = require('./model/config')
 
 let app
 
@@ -23,8 +24,12 @@ class Behavior {
       app.initMessage(client, channel)
     })
 
-    this.intervalPerMinutes = app.defaultIntervalMinutes()
-    this.interval(true)
+    config.select('interval')
+      .then(row => {
+        this.intervalPerMinutes = row.value
+        this.interval(true)
+        log.debug(`current interval : ${row.value}`)
+      })
 
     // load commands
     this.loadCommand(client)

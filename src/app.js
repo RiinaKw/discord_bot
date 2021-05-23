@@ -5,7 +5,6 @@ const sender = require('./lib/message')
 const log = require('./lib/log4js')
 
 const reminder = require('./model/reminder')
-const dbConfig = require('./model/config')
 
 const config = require('../config/global')
 
@@ -18,15 +17,6 @@ class App {
     this.commandPrefix = config.command_prefix
 
     client.app = this
-
-    dbConfig.select('interval')
-      .then(row => {
-        const b = client.behavior
-
-        b.intervalPerMinutes = row.value
-        b.interval(true)
-        log.debug(`current interval : ${row.value}`)
-      })
   } // function init()
 
   initMessage (client, channel) {
@@ -36,10 +26,6 @@ class App {
   channelName () {
     return config.channel || 'general'
   } // function channelName()
-
-  defaultIntervalMinutes () {
-    return config.interval || 60
-  } // function defaultIntervalMinutes()
 
   interval (channel) {
     const content = moment().format('YYYY-MM-DD HH:mm:ss')
