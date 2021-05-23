@@ -33,16 +33,18 @@ module.exports = {
             })
         } // case 'list'
 
-        case 'show': {
+        case 'detail': {
           if (args.length) {
             const id = args.shift().toLowerCase()
             return await api.get(`/applications/${appId}/commands/${id}`)
               .then(json => {
                 log.info(json)
+                const jsonString = JSON.stringify(json)
                 // sender.send(b.channel, 'see console')
                 const content = [
-                  `name : ${json.name}`,
-                  `description : ${json.description}`
+                  `**name** : ${json.name}`,
+                  `**description** : ${json.description}`,
+                  `**json** : ${jsonString}`
                 ]
                 return content
               })
