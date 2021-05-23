@@ -53,7 +53,7 @@ client.on('ready', () => {
       } catch (e) {
         throw new Error(`unknown slash command : ${command}`)
       }
-      let content = slash.execute(client, args)
+      let content = await slash.execute(client, args)
       if (typeof content !== 'string') {
         content = content.join('\n')
       }

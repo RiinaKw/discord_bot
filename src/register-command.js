@@ -1,6 +1,7 @@
 'use strict'
 
 console.log('ここ読め : https://discord.com/developers/docs/interactions/slash-commands')
+console.log('option の値は : https://discord.com/developers/docs/interactions/slash-commands#applicationcommandoptiontype')
 
 const defs = []
 
@@ -75,7 +76,7 @@ defs.push(
   }
 )
 */
-
+/*
 defs.push(
   {
     name: 'admin',
@@ -98,7 +99,8 @@ defs.push(
     ]
   }
 )
-/*
+*/
+
 defs.push(
   {
     name: 'slash',
@@ -122,7 +124,20 @@ defs.push(
               {
                 name: 'name',
                 description: 'command name',
-                type: 4,
+                type: 3,
+                required: true
+              }
+            ]
+          },
+          {
+            name: 'delete',
+            description: 'delete slash command',
+            type: 1,
+            options: [
+              {
+                name: 'name',
+                description: 'command name',
+                type: 3,
                 required: true
               }
             ]
@@ -132,7 +147,7 @@ defs.push(
     ]
   }
 )
-*/
+
 /*
 defs.push(
   {
