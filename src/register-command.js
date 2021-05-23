@@ -79,7 +79,7 @@ defs.push(
   {
     name: 'admin',
     description: 'Execute a admin command',
-    permission: 2048,
+    permission: 32,
     options: [
       {
         name: 'command',
@@ -124,6 +124,7 @@ client.on('ready', () => {
   const api = require('./lib/api')
 
   defs.forEach(def => {
+    log.info(def)
     api.post(`/applications/${appId}/commands`, def)
       .then(result => {
         console.log('-------------------------')
@@ -134,7 +135,7 @@ client.on('ready', () => {
         const json = {
           permissions: [
             {
-              id: 'ADMINISTRATOR',
+              id: 32,
               type: 1,
               permission: true
             }

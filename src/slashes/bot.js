@@ -15,7 +15,7 @@ module.exports = {
         if (interval.options) {
           const minutes = interval.options.find(item => item.name === 'minutes')
           if (minutes.value <= 0) {
-            throw new Error('minutes must be greater than zero')
+            throw new Error('**bot interval error** : minutes must be greater than zero')
           }
 
           // change interval time

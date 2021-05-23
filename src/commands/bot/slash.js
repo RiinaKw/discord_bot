@@ -77,7 +77,7 @@ module.exports = {
     return [
       '**bot slash command**',
       '  `bot slash list` : Show all slash commands',
-      '  `bot slash show [id]` : Show detail of slash command',
+      '  `bot slash detail [id]` : Show detail of slash command',
       '  `bot slash delete [id]` : Delete slash command'
     ]
   } // execute()
