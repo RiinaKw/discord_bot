@@ -5,7 +5,7 @@ const api = require('../lib/api')
 
 module.exports = {
   name: 'slash',
-  description: 'manage slash commands',
+  description: 'manage slash commands (needs ADMINISTRATOR permission)',
   permissions: 'ADMINISTRATOR',
 
   async list (appId) {
