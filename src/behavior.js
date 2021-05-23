@@ -1,6 +1,8 @@
 'use strict'
 
 const moment = require('moment')
+const fs = require('fs')
+const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
 
 let app
@@ -27,9 +29,32 @@ class Behavior {
     // this.prevIntervalTime;
     this.interval(true)
 
+    // load commands
+    this.loadCommand(client)
+
     client.behavior = this
     app.init(client, channel)
   } // function init()
+
+  loadCommand (client) {
+    try {
+      const token = require('../config/token')
+      client.login(token)
+
+      client.commands = require('./lib/collection')
+      const dir = `${__dirname}/commands`
+      const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
+      commandFiles.forEach(file => {
+        const command = require(`${dir}/${file}`)
+        // set a new item in the Collection
+        // with the key as the command name and the value as the exported module
+        client.commands.set(command.name, command)
+      })
+    } catch (e) {
+      client.destroy()
+      processmanager.shutdown(e)
+    }
+  }
 
   interval (boot) {
     if (!boot) {
@@ -59,14 +84,14 @@ class Behavior {
 
   command (message) {
     const client = message.client
-    const content = message.content
-    const match = content.match(/^<@!?\d+>\s+(?<body>.*)$/)
-    const body = match.groups.body
+    const prefix = client.app.commandPrefix
+    if (!message.content.startsWith(prefix)) return
 
-    const args = body.trim().split(/\s+/)
+    const args = message.content.slice(prefix.length).trim().split(/ +/)
     const name = args.shift().toLowerCase()
 
     if (!client.commands.has(name)) {
+      message.reply(`unknown command : **${name}**`)
       return false
     }
     const command = client.commands.get(name)
@@ -93,7 +118,7 @@ class Behavior {
   }
 
   message (message) {
-    app.message(message)
+    this.command(message)
   } // function message()
 
   mention (message) {

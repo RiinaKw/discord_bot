@@ -16,6 +16,9 @@ class App {
     if (config.activity) {
       client.user.setPresence({ activity: config.activity })
     }
+
+    this.commandPrefix = config.command_prefix
+
     client.app = this
 
     dbConfig.select('interval')

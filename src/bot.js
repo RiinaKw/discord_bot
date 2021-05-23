@@ -1,8 +1,7 @@
 'use strict'
 
-const fs = require('fs')
-const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
+const processmanager = require('./lib/process')
 
 let behavior
 
@@ -18,16 +17,6 @@ const client = new Discord.Client()
 try {
   const token = require('../config/token')
   client.login(token)
-
-  client.commands = new Discord.Collection()
-  const dir = `${__dirname}/commands`
-  const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
-  commandFiles.forEach(file => {
-    const command = require(`${dir}/${file}`)
-    // set a new item in the Collection
-    // with the key as the command name and the value as the exported module
-    client.commands.set(command.name, command)
-  })
 } catch (err) {
   client.destroy()
   processmanager.shutdown(err)
@@ -80,14 +69,12 @@ client.on('ready', () => {
 }) // ready
 
 client.on('message', message => {
-  if (!message.author.bot) {
-    const isMentionToSelf = message.mentions.users.find(ch => ch.id === client.user.id)
-    if (isMentionToSelf) {
-      if (!behavior.command(message)) {
-        behavior.mention(message)
-      }
-    } else {
-      behavior.message(message)
-    }
+  if (message.author.bot) return
+
+  const isMentionToSelf = message.mentions.users.find(ch => ch.id === client.user.id)
+  if (isMentionToSelf) {
+    behavior.mention(message)
+  } else {
+    behavior.message(message)
   }
 }) // message
