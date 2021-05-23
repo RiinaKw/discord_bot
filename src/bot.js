@@ -21,7 +21,6 @@ try {
 
   client.commands = new Discord.Collection()
   const dir = `${__dirname}/commands`
-
   const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
   commandFiles.forEach(file => {
     const command = require(`${dir}/${file}`)
