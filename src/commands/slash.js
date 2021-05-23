@@ -3,10 +3,34 @@
 const log = require('../lib/log4js')
 const api = require('../lib/api')
 
+const defs = []
+defs.push({
+  param: {
+    name: 'aaaaa',
+    description: 'Command of aaaaa'
+  },
+  permissions: true
+})
+defs.push({
+  param: {
+    name: 'bbbbb',
+    description: 'Command of bbbbb'
+  },
+  permissions: true
+})
+
 module.exports = {
   name: 'slash',
   description: 'manage slash commands (needs ADMINISTRATOR permission)',
   permissions: 'ADMINISTRATOR',
+
+  load (name) {
+    const def = defs.find(def => def.param.name === name)
+    if (!def) {
+      throw new Error(`command **${name}** not found`)
+    }
+    return def
+  },
 
   async list (appId) {
     return await api.get(`/applications/${appId}/commands`)
@@ -57,6 +81,21 @@ module.exports = {
             })
         } // case 'list'
 
+        case 'list-guild': {
+          const guild = message.channel.guild
+          try {
+            const list = await api.get(`/applications/${appId}/guilds/${guild.id}/commands`)
+              .catch(err => {
+                throw new Error(err)
+              })
+            console.log(list)
+          } catch (e) {
+            log.fatal(e)
+            return e.message
+          }
+          return
+        }
+
         case 'detail': {
           if (args.length < 1) {
             message.reply('input command name')
@@ -70,7 +109,8 @@ module.exports = {
             log.fatal(command)
           } catch (e) {
             log.fatal(e)
-            return e.message
+            message.reply(e.message)
+            return
           }
           log.info(command)
 
@@ -92,6 +132,33 @@ module.exports = {
             })
         } // case 'show'
 
+        case 'register': {
+          if (args.length < 1) {
+            message.reply('input command name')
+            return
+          }
+          const name = args.shift().toLowerCase()
+          let def
+          try {
+            def = this.load(name)
+          } catch (e) {
+            log.fatal(e)
+            message.reply(e.message)
+            return
+          }
+          log.info(def.param)
+
+          return await api.post(`/applications/${appId}/commands`, def.param)
+            .then(result => {
+              log.info(result)
+              message.reply('success')
+            })
+            .catch(e => {
+              log.fatal('ERROR', e)
+              return e
+            })
+        }
+
         case 'delete': {
           if (args.length < 1) {
             message.reply('input command name')
@@ -105,7 +172,8 @@ module.exports = {
             log.fatal(command)
           } catch (e) {
             log.fatal(e)
-            return e.message
+            message.reply(e.message)
+            return
           }
           log.info(command)
 
@@ -124,7 +192,8 @@ module.exports = {
       '**slash command**',
       '  `slash list` : Show all slash commands',
       '  `slash detail [name]` : Show detail of slash command',
-      '  `slash delete [name]` : Delete slash command'
+      '  `slash delete [name]` : Delete slash command',
+      '  `slash register [name]` : Register the stored command'
     ]
     message.reply(help)
   } // execute()

@@ -110,16 +110,15 @@ defs.push(
           }
         ]
       }
-    ]
+    ] // options
   }
 )
 
-/*
 defs.push(
   {
     name: 'admin',
     description: 'Execute a admin command',
-    default_permission: false,
+    // default_permission: false,
     options: [
       {
         name: 'reboot',
@@ -130,11 +129,15 @@ defs.push(
         name: 'more',
         description: 'more command',
         type: OptionType.SUB_COMMAND
+      },
+      {
+        name: 'another',
+        description: 'another command',
+        type: OptionType.SUB_COMMAND
       }
     ]
   }
 )
-*/
 
 defs.push(
   {
@@ -143,15 +146,28 @@ defs.push(
   }
 )
 
+defs.push(
+  {
+    name: 'aaa',
+    description: 'Command of aaa'
+  }
+)
+
 client.on('ready', async () => {
   const appId = client.user.id
   const api = require('./lib/api')
 
-  // const roleManager = new Discord.RoleManager()
-  // console.log(roleManager)
-
+  /*
   const guild = client.guilds.cache.find(item => item.name === 'Riina\'s test server')
   const roleAdmin = guild.roles.cache.find(item => item.name === 'admin')
+  // console.log(roleEveryone)
+  */
+
+  const roles = []
+  client.guilds.cache.each(guild => {
+    const roleEveryone = guild.roles.cache.find(item => item.name === '@everyone')
+    roles.push(roleEveryone)
+  })
 
   defs.forEach(def => {
     log.info(def)
@@ -179,6 +195,30 @@ client.on('ready', async () => {
             log.fatal('ERROR', e)
           })
           */
+
+        /*
+        const commandId = result.id
+        roles.forEach(role => {
+          console.log(role)
+          const json = {
+            permissions: [
+              {
+                id: role.id,
+                type: PermissionType.ROLE,
+                permission: true
+              }
+            ]
+          }
+          api.put(`/applications/${appId}/guilds/${role.guild.id}/commands/${commandId}/permissions`, json)
+            .then(result => {
+              log.info(result)
+            })
+            .catch(e => {
+              log.fatal('ERROR', e)
+            })
+        })
+        */
+
       })
       .catch(e => {
         log.fatal('ERROR', e)

@@ -15,6 +15,8 @@ module.exports = {
       const command = commands.get(name)
       const help = []
 
+      console.log(command)
+
       help.push(`**Name:** ${command.name}`)
       if (command.aliases) help.push(`**Aliases:** ${command.aliases.join(', ')}`)
       if (command.description) help.push(`**Description:** ${command.description}`)
