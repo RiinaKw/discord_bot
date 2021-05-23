@@ -3,141 +3,6 @@
 console.log('ここ読め : https://discord.com/developers/docs/interactions/slash-commands')
 console.log('option の値は : https://discord.com/developers/docs/interactions/slash-commands#applicationcommandoptiontype')
 
-const defs = []
-
-/*
-defs.push(
-  {
-    name: 'blep',
-    description: 'Send a random adorable animal photo',
-    options: [
-      {
-        name: 'animal',
-        description: 'The type of animal',
-        type: 3,
-        required: true,
-        choices: [
-          {
-            name: 'Dog',
-            value: 'animal_dog'
-          },
-          {
-            name: 'Cat',
-            value: 'animal_cat'
-          },
-          {
-            name: 'Penguin',
-            value: 'animal_penguin'
-          }
-        ]
-      },
-      {
-        name: 'only_smol',
-        description: 'Whether to show only baby animals',
-        type: 5,
-        required: false
-      }
-    ]
-  }
-)
-*/
-
-defs.push(
-  {
-    name: 'bot',
-    description: 'Execute a bot command',
-    options: [
-      {
-        name: 'interval',
-        description: 'Manage bot interval',
-        type: 1,
-        options: [
-          {
-            name: 'minutes',
-            description: 'interval value',
-            type: 4,
-            required: false
-          }
-        ]
-      },
-      {
-        name: 'help',
-        description: 'Show help of bot command',
-        type: 1
-      }
-    ]
-  }
-)
-
-defs.push(
-  {
-    name: 'admin',
-    description: 'Execute a admin command',
-    //permission: 2048,
-    options: [
-      {
-        name: 'reboot',
-        description: 'Reboot this bot',
-        type: 1
-      },
-      {
-        name: 'more',
-        description: 'more command',
-        type: 1
-      }
-    ]
-  }
-)
-
-defs.push(
-  {
-    name: 'slash',
-    description: 'Manage slash commands',
-    options: [
-      {
-        name: 'list',
-        description: 'Show all slash commands',
-        type: 1
-      },
-      {
-        name: 'detail',
-        description: 'Show detail of slash command',
-        type: 1,
-        options: [
-          {
-            name: 'name',
-            description: 'command name',
-            type: 3,
-            required: true
-          }
-        ]
-      },
-      {
-        name: 'delete',
-        description: 'delete slash command',
-        type: 1,
-        options: [
-          {
-            name: 'name',
-            description: 'command name',
-            type: 3,
-            required: true
-          }
-        ]
-      }
-    ]
-  }
-)
-
-/*
-defs.push(
-  {
-    name: 'not-implemented',
-    description: 'Example of not-implemented slash command'
-  }
-)
-*/
-
 const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
 
@@ -152,9 +17,181 @@ try {
   processmanager.shutdown(e)
 }
 
-client.on('ready', () => {
+class OptionType {
+  static get SUB_COMMAND () {
+    return 1
+  }
+
+  static get SUB_COMMAND_GROUP () {
+    return 2
+  }
+
+  static get STRING () {
+    return 3
+  }
+
+  static get INTEGER () {
+    return 4
+  }
+
+  static get BOOLEAN () {
+    return 5
+  }
+
+  static get USER () {
+    return 6
+  }
+
+  static get CHANNEL () {
+    return 7
+  }
+
+  static get ROLE () {
+    return 8
+  }
+}
+
+class PermissionType {
+  static get ROLE () {
+    return 1
+  }
+
+  static get USER () {
+    return 2
+  }
+}
+
+const defs = []
+
+defs.push(
+  {
+    name: 'bot',
+    description: 'Execute a bot command',
+    options: [
+      {
+        name: 'interval',
+        description: 'Manage bot interval',
+        type: OptionType.SUB_COMMAND,
+        options: [
+          {
+            name: 'minutes',
+            description: 'interval value',
+            type: OptionType.INTEGER,
+            required: false
+          }
+        ]
+      },
+      {
+        name: 'activity',
+        description: 'Change bot activity',
+        type: OptionType.SUB_COMMAND,
+        options: [
+          {
+            name: 'name',
+            description: 'activity name',
+            type: OptionType.STRING,
+            required: false
+          },
+          {
+            name: 'type',
+            description: 'activity type',
+            type: OptionType.STRING,
+            required: false,
+            choices: [
+              {
+                name: 'Playing',
+                value: 'PLAYING'
+              },
+              {
+                name: 'Another',
+                value: 'ANOTHER'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+)
+
+/*
+defs.push(
+  {
+    name: 'admin',
+    description: 'Execute a admin command',
+    default_permission: false,
+    options: [
+      {
+        name: 'reboot',
+        description: 'Reboot this bot',
+        type: OptionType.SUB_COMMAND
+      },
+      {
+        name: 'more',
+        description: 'more command',
+        type: OptionType.SUB_COMMAND
+      }
+    ]
+  }
+)
+*/
+
+defs.push(
+  {
+    name: 'slash',
+    description: 'Manage slash commands',
+    options: [
+      {
+        name: 'list',
+        description: 'Show all slash commands',
+        type: OptionType.SUB_COMMAND
+      },
+      {
+        name: 'detail',
+        description: 'Show detail of slash command',
+        type: OptionType.SUB_COMMAND,
+        options: [
+          {
+            name: 'name',
+            description: 'command name',
+            type: OptionType.STRING,
+            required: true
+          }
+        ]
+      },
+      {
+        name: 'delete',
+        description: 'delete slash command',
+        type: OptionType.SUB_COMMAND,
+        options: [
+          {
+            name: 'name',
+            description: 'command name',
+            type: OptionType.STRING,
+            required: true
+          }
+        ]
+      }
+    ]
+  }
+)
+
+defs.push(
+  {
+    name: 'not-implemented',
+    description: 'Example of not-implemented slash command'
+  }
+)
+
+client.on('ready', async () => {
   const appId = client.user.id
   const api = require('./lib/api')
+
+  // const roleManager = new Discord.RoleManager()
+  // console.log(roleManager)
+
+  const guild = client.guilds.cache.find(item => item.name === 'Riina\'s test server')
+  const roleAdmin = guild.roles.cache.find(item => item.name === 'admin')
 
   defs.forEach(def => {
     log.info(def)
@@ -168,13 +205,13 @@ client.on('ready', () => {
         const json = {
           permissions: [
             {
-              id: 32,
-              type: 1,
+              id: roleAdmin.id,
+              type: PermissionType.ROLE,
               permission: true
             }
           ]
         }
-        api.put(`/applications/${appId}/commands/${commandId}/permissions`, json)
+        api.put(`/applications/${appId}/guilds/${guild.id}/commands/${commandId}/permissions`, json)
           .then(result => {
             log.info(result)
           })
