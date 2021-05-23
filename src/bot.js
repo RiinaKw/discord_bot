@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('fs')
-const process = require('./lib/process')
+const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
 
 let behavior
@@ -20,16 +20,18 @@ try {
   client.login(token)
 
   client.commands = new Discord.Collection()
-  const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'))
+  const dir = `${__dirname}/commands`
+
+  const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
   commandFiles.forEach(file => {
-    const command = require(`./commands/${file}`)
+    const command = require(`${dir}/${file}`)
     // set a new item in the Collection
     // with the key as the command name and the value as the exported module
     client.commands.set(command.name, command)
   })
 } catch (err) {
   client.destroy()
-  process.shutdown(err)
+  processmanager.shutdown(err)
 }
 
 client.on('ready', () => {

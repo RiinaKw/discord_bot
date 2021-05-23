@@ -1,7 +1,7 @@
 'use strict'
 
 const mariadb = require('mariadb')
-const process = require('../lib/process')
+const processmanager = require('../lib/process')
 const log = require('../lib/log4js')
 
 try {
@@ -18,8 +18,8 @@ try {
       return result
     })
     .catch(e => {
-      process.shutdown(e)
+      processmanager.shutdown(e)
     })
 } catch (e) {
-  process.shutdown(e)
+  processmanager.shutdown(e)
 }

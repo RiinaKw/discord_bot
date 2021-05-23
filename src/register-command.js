@@ -86,7 +86,7 @@ defs.push(
 )
 */
 
-const process = require('./lib/process')
+const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
 
 const Discord = require('discord.js')
@@ -97,7 +97,7 @@ try {
   client.login(token)
 } catch (e) {
   client.destroy()
-  process.shutdown(e)
+  processmanager.shutdown(e)
 }
 
 client.on('ready', () => {
