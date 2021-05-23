@@ -75,10 +75,13 @@ defs.push(
   }
 )
 */
+
 defs.push(
   {
     name: 'admin',
     description: 'Execute a admin command',
+    default_permission: false,
+    permission: 32,
     options: [
       {
         name: 'command',
@@ -95,6 +98,41 @@ defs.push(
     ]
   }
 )
+/*
+defs.push(
+  {
+    name: 'slash',
+    description: 'Manage slash commands',
+    options: [
+      {
+        name: 'command',
+        description: 'sub command',
+        type: 2,
+        options: [
+          {
+            name: 'list',
+            description: 'Show all slash commands',
+            type: 1
+          },
+          {
+            name: 'detail',
+            description: 'Show detail of slash command',
+            type: 1,
+            options: [
+              {
+                name: 'name',
+                description: 'command name',
+                type: 4,
+                required: true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+)
+*/
 /*
 defs.push(
   {
