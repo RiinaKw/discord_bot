@@ -23,6 +23,12 @@ module.exports = {
   name: 'slash',
   description: 'manage slash commands (needs ADMINISTRATOR permission)',
   permissions: 'ADMINISTRATOR',
+  usage: [
+    '  `slash list` : Show all slash commands',
+    '  `slash detail [name]` : Show detail of slash command',
+    '  `slash delete [name]` : Delete slash command',
+    '  `slash register [name]` : Register the stored command'
+  ],
 
   load (name) {
     const def = defs.find(def => def.param.name === name)

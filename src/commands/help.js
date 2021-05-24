@@ -13,18 +13,25 @@ module.exports = {
     } else {
       const name = args[0]
       const command = commands.get(name)
-      const help = []
+      const response = []
 
       console.log(command)
 
-      help.push(`**Name:** ${command.name}`)
-      if (command.aliases) help.push(`**Aliases:** ${command.aliases.join(', ')}`)
-      if (command.description) help.push(`**Description:** ${command.description}`)
-      if (command.usage) help.push(`**Usage:** ${command.name} ${command.usage}`)
+      response.push(`**Name:** ${command.name}`)
+      if (command.aliases) response.push(`**Aliases:** ${command.aliases.join(', ')}`)
+      if (command.description) response.push(`**Description:** ${command.description}`)
+      if (command.permissions) response.push(`**Permissions:** ${command.permissions}`)
+      // if (command.usage) response.push(`**Usage:** ${command.name} ${command.usage}`)
 
-      help.push(`**Cooldown:** ${command.cooldown || 3} second(s)`)
+      // response.push(`**Cooldown:** ${command.cooldown || 3} second(s)`)
 
-      sender.send(message.channel, help)
+      if (command.usage) {
+        let usage = command.usage
+        if (typeof usage !== 'string') usage = usage.join('\n')
+        response.push(`**Usage:** \n${usage}`)
+      }
+
+      sender.send(message.channel, response)
     }
   }
 }

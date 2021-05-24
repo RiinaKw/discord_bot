@@ -8,6 +8,17 @@ const reminder = require('../model/reminder')
 module.exports = {
   name: 'reminder',
   description: 'reminder manager, type `reminder help` to get more help',
+  usage: [
+    '  `reminder all` : ',
+    '    Show all registered reminders.',
+    '  `reminder expired` : ',
+    '    Show expired registered reminders.',
+    '  `reminder register [title] [datetime]` : ',
+    '    Register reminder with datetime as deadline.',
+    '  `reminder delete [title]` : ',
+    '    Delete reminder which title matched.'
+  ],
+
   execute (message, args) {
     if (args.length) {
       const command = args.shift().toLowerCase()
