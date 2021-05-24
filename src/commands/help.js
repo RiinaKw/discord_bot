@@ -7,15 +7,21 @@ class Help extends require('../base/command') {
     super()
 
     this.name = 'help'
-    this.description = 'show help message'
-    this.usage = '  simply type `help`'
+    this.description = 'Show help message'
+    this.usage = [
+      '  `help` : Show all local commands',
+      '  `help [name]` : Show detail of local command'
+    ]
   }
 
   execute (message, args) {
     const { commands } = message.client
 
     if (!args.length) {
-      message.reply(commands.map(command => command.name).join(', '))
+      const content =
+        '**Available command list** : \n  ' +
+        commands.map(command => '`' + command.name + '`').join('\n  ')
+      message.reply(content)
     } else {
       const name = args[0]
       const command = commands.get(name)
