@@ -3,7 +3,13 @@
 const processmanager = require('../lib/process')
 const log = require('../lib/log4js')
 
-module.exports = {
+class AdminSlash extends require('../base/slash') {
+  constructor () {
+    super()
+
+    this.name = 'admin'
+  }
+
   execute (client, args) {
     const subcommand = args[0]
     switch (subcommand.name) {
@@ -13,7 +19,9 @@ module.exports = {
         return 'rebooting...'
       }
       default:
-        throw new Error(`unknwon command \`admin ${subcommand.name}\``)
+        this.unknown(subcommand.name)
     }
   }
 }
+
+module.exports = new AdminSlash()

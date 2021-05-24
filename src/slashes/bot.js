@@ -3,7 +3,13 @@
 const log = require('../lib/log4js')
 const config = require('../model/config')
 
-module.exports = {
+class BotSlash extends require('../base/slash') {
+  constructor () {
+    super()
+
+    this.name = 'bot'
+  }
+
   execute (client, args) {
     const subcommand = args[0]
     switch (subcommand.name) {
@@ -33,7 +39,9 @@ module.exports = {
         }
       }
       default:
-        throw new Error(`unknwon command \`bot ${subcommand.name}\``)
+        this.unknown(subcommand.name)
     }
   }
 }
+
+module.exports = new BotSlash()
