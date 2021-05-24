@@ -67,6 +67,25 @@ class Slash extends require('../base/command') {
     return target
   }
 
+  async requireRegistered (message, args) {
+    if (args.length < 1) {
+      message.reply('input command name')
+      return null
+    }
+
+    const appId = message.client.user.id
+    const name = args.shift().toLowerCase()
+    try {
+      const command = await this.find(appId, name)
+      log.info(command)
+      return command
+    } catch (e) {
+      log.fatal(e)
+      message.reply(e.message)
+      return null
+    }
+  }
+
   async execute (message, args) {
     // const b = message.client.behavior
     if (args.length) {
@@ -114,22 +133,8 @@ class Slash extends require('../base/command') {
         }
 
         case 'detail': {
-          if (args.length < 1) {
-            message.reply('input command name')
-            return
-          }
-
-          const name = args.shift().toLowerCase()
-          let command
-          try {
-            command = await this.find(appId, name)
-            log.fatal(command)
-          } catch (e) {
-            log.fatal(e)
-            message.reply(e.message)
-            return
-          }
-          log.info(command)
+          const command = await this.requireRegistered(message, args)
+          if (!command) return
 
           return await api.get(`/applications/${appId}/commands/${command.id}`)
             .then(json => {
@@ -147,7 +152,7 @@ class Slash extends require('../base/command') {
               log.fatal('api error : ', e)
               return e
             })
-        } // case 'show'
+        } // case 'detail'
 
         case 'stored': {
           if (args.length < 1) {
@@ -202,22 +207,8 @@ class Slash extends require('../base/command') {
         }
 
         case 'delete': {
-          if (args.length < 1) {
-            message.reply('input command name')
-            return
-          }
-
-          const name = args.shift().toLowerCase()
-          let command
-          try {
-            command = await this.find(appId, name)
-            log.fatal(command)
-          } catch (e) {
-            log.fatal(e)
-            message.reply(e.message)
-            return
-          }
-          log.info(command)
+          const command = await this.requireRegistered(message, args)
+          if (!command) return
 
           return await api.delete(`/applications/${appId}/commands/${command.id}`)
             .then(json => {
