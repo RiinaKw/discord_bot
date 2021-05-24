@@ -24,13 +24,16 @@ class Slash extends require('../base/command') {
     super()
 
     this.name = 'slash'
-    this.description = 'manage slash commands (needs ADMINISTRATOR permission)'
+    this.description = 'manage slash commands'
     this.permissions = 'ADMINISTRATOR'
     this.usage = [
-      '  `slash list` : Show all slash commands',
-      '  `slash detail [name]` : Show detail of slash command',
-      '  `slash delete [name]` : Delete slash command',
-      '  `slash register [name]` : Register the stored command'
+      '  `slash list` : Show all registered slash commands',
+      '  `slash list-guild` : Show all registered slash commands for this guild (experimental)',
+      '  `slash detail [name]` : Show detail of registered slash command',
+      '  `slash delete [name]` : Delete registered slash command',
+      '  `slash stored` : Show the list of stored slash commands',
+      '  `slash stored [name]` : Show detail of stored slash command',
+      '  `slash add [name]` : Register the stored command'
     ]
   }
 
@@ -146,7 +149,32 @@ class Slash extends require('../base/command') {
             })
         } // case 'show'
 
-        case 'register': {
+        case 'stored': {
+          if (args.length < 1) {
+            message.reply('**available** : ' + defs.map(def => def.param.name).join(', '))
+            return
+          }
+          const name = args.shift().toLowerCase()
+          let def
+          try {
+            def = this.load(name)
+          } catch (e) {
+            log.fatal(e)
+            message.reply(e.message)
+            return
+          }
+          log.info(def)
+          const jsonString = JSON.stringify(def)
+          const content = [
+            `**name** : ${def.param.name}`,
+            `**description** : ${def.param.description}`,
+            `**json** : ${jsonString}`
+          ]
+          message.reply(content)
+          return
+        }
+
+        case 'add': {
           if (args.length < 1) {
             message.reply('input command name')
             return
