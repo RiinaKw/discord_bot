@@ -12,13 +12,19 @@ class Reload extends require('../base/command') {
     this.name = 'reload'
     this.description = 'Reload a command'
     this.permissions = 'ADMINISTRATOR'
-    this.usage = '  simply type `reload`'
-    this.args = true
+    this.usage = [
+      '  `reload local [name]` : ',
+      '    Reload local command.',
+      '  `reload slash [name]` : ',
+      '    Reload slash command.'
+    ]
+    // this.args = 2
   }
 
   execute (message, args) {
     if (args.length < 2) {
-      return message.reply('require argument')
+      message.reply(this.help())
+      return
     }
 
     const category = args.shift().toLowerCase()
