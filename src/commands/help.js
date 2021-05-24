@@ -2,9 +2,15 @@
 
 const sender = require('../lib/message')
 
-module.exports = {
-  name: 'help',
-  description: 'show help message',
+class Help extends require('../base/command') {
+  constructor () {
+    super()
+
+    this.name = 'help'
+    this.description = 'show help message'
+    this.usage = '  simply type `help`'
+  }
+
   execute (message, args) {
     const { commands } = message.client
 
@@ -35,3 +41,5 @@ module.exports = {
     }
   }
 }
+
+module.exports = new Help()

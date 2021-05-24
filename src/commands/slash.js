@@ -19,16 +19,20 @@ defs.push({
   permissions: true
 })
 
-module.exports = {
-  name: 'slash',
-  description: 'manage slash commands (needs ADMINISTRATOR permission)',
-  permissions: 'ADMINISTRATOR',
-  usage: [
-    '  `slash list` : Show all slash commands',
-    '  `slash detail [name]` : Show detail of slash command',
-    '  `slash delete [name]` : Delete slash command',
-    '  `slash register [name]` : Register the stored command'
-  ],
+class Slash extends require('../base/command') {
+  constructor () {
+    super()
+
+    this.name = 'slash'
+    this.description = 'manage slash commands (needs ADMINISTRATOR permission)'
+    this.permissions = 'ADMINISTRATOR'
+    this.usage = [
+      '  `slash list` : Show all slash commands',
+      '  `slash detail [name]` : Show detail of slash command',
+      '  `slash delete [name]` : Delete slash command',
+      '  `slash register [name]` : Register the stored command'
+    ]
+  }
 
   load (name) {
     const def = defs.find(def => def.param.name === name)
@@ -36,7 +40,7 @@ module.exports = {
       throw new Error(`command **${name}** not found`)
     }
     return def
-  },
+  }
 
   async list (appId) {
     return await api.get(`/applications/${appId}/commands`)
@@ -46,7 +50,7 @@ module.exports = {
       .catch(err => {
         log.fatal('ERROR', err)
       })
-  },
+  }
 
   async find (appId, name) {
     const list = await this.list(appId)
@@ -58,7 +62,7 @@ module.exports = {
       throw new Error(`command **${name}** not found`)
     }
     return target
-  },
+  }
 
   async execute (message, args) {
     // const b = message.client.behavior
@@ -194,13 +198,9 @@ module.exports = {
         } // case 'delete'
       } // switch
     }
-    const help = [
-      '**slash command**',
-      '  `slash list` : Show all slash commands',
-      '  `slash detail [name]` : Show detail of slash command',
-      '  `slash delete [name]` : Delete slash command',
-      '  `slash register [name]` : Register the stored command'
-    ]
-    message.reply(help)
+
+    message.reply(this.help())
   } // execute()
 }
+
+module.exports = new Slash()

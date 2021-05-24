@@ -5,19 +5,23 @@ const sender = require('../lib/message')
 const log = require('../lib/log4js')
 const reminder = require('../model/reminder')
 
-module.exports = {
-  name: 'reminder',
-  description: 'reminder manager, type `reminder help` to get more help',
-  usage: [
-    '  `reminder all` : ',
-    '    Show all registered reminders.',
-    '  `reminder expired` : ',
-    '    Show expired registered reminders.',
-    '  `reminder register [title] [datetime]` : ',
-    '    Register reminder with datetime as deadline.',
-    '  `reminder delete [title]` : ',
-    '    Delete reminder which title matched.'
-  ],
+class Reminder extends require('../base/command') {
+  constructor () {
+    super()
+
+    this.name = 'reminder'
+    this.description = 'reminder manager, type `reminder help` to get more help'
+    this.usage = [
+      '  `reminder all` : ',
+      '    Show all registered reminders.',
+      '  `reminder expired` : ',
+      '    Show expired registered reminders.',
+      '  `reminder register [title] [datetime]` : ',
+      '    Register reminder with datetime as deadline.',
+      '  `reminder delete [title]` : ',
+      '    Delete reminder which title matched.'
+    ]
+  }
 
   execute (message, args) {
     if (args.length) {
@@ -100,17 +104,8 @@ module.exports = {
       } // switch
     } // if (command)
 
-    const help = [
-      '**reminder commands**',
-      '  `reminder all` : ',
-      '    Show all registered reminders.',
-      '  `reminder expired` : ',
-      '    Show expired registered reminders.',
-      '  `reminder register [title] [datetime]` : ',
-      '    Register reminder with datetime as deadline.',
-      '  `reminder delete [title]` : ',
-      '    Delete reminder which title matched.'
-    ]
-    sender.reply(message, help)
+    message.reply(this.help())
   }
 }
+
+module.exports = new Reminder()
