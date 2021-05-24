@@ -13,7 +13,21 @@ module.exports = a => {
 }
 
 class Behavior {
-  init (client) {
+  async init (client) {
+    // load commands
+    this.loadCommand(client)
+
+    await config.select('commandPrefix')
+      .then(row => {
+        this.commandPrefix = row.value
+      })
+    await config.select('interval')
+      .then(row => {
+        this.intervalPerMinutes = row.value
+        this.interval(true)
+        log.debug(`current interval : ${row.value}`)
+      })
+
     const channelName = app.channelName()
     client.guilds.cache.forEach(guild => {
       let channel = guild.channels.cache.find(ch => ch.name === channelName)
@@ -25,35 +39,20 @@ class Behavior {
       this.channel = channel
     })
 
-    config.select('interval')
-      .then(row => {
-        this.intervalPerMinutes = row.value
-        this.interval(true)
-        log.debug(`current interval : ${row.value}`)
-      })
-
-    // load commands
-    this.loadCommand(client)
-
     client.behavior = this
     app.init(client)
   } // function init()
 
   loadCommand (client) {
-    try {
-      client.commands = require('./lib/collection')
-      const dir = `${__dirname}/commands`
-      const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
-      commandFiles.forEach(file => {
-        const command = require(`${dir}/${file}`)
-        // set a new item in the Collection
-        // with the key as the command name and the value as the exported module
-        client.commands.set(command.name, command)
-      })
-    } catch (e) {
-      client.destroy()
-      processmanager.shutdown(e)
-    }
+    client.commands = require('./lib/collection')
+    const dir = `${__dirname}/commands`
+    const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
+    commandFiles.forEach(file => {
+      const command = require(`${dir}/${file}`)
+      // set a new item in the Collection
+      // with the key as the command name and the value as the exported module
+      client.commands.set(command.name, command)
+    })
   }
 
   interval (boot) {
@@ -84,10 +83,9 @@ class Behavior {
 
   command (message) {
     const client = message.client
-    const prefix = client.app.commandPrefix
-    if (!message.content.startsWith(prefix)) return
+    if (!message.content.startsWith(this.commandPrefix)) return
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/)
+    const args = message.content.slice(this.commandPrefix.length).trim().split(/ +/)
     const name = args.shift().toLowerCase()
 
     if (!client.commands.has(name)) {

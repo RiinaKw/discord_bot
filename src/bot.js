@@ -22,50 +22,56 @@ try {
   processmanager.shutdown(err)
 }
 
-client.on('ready', () => {
-  behavior.init(client)
-  log.debug(`bot id: ${client.user.id}`)
-  log.debug('Ready...')
+client.on('ready', async () => {
+  try {
+    await behavior.init(client)
 
-  client.ws.on('INTERACTION_CREATE', async interaction => {
-    const command = interaction.data.name.toLowerCase()
-    const args = interaction.data.options
-    const user = interaction.member.user
-    const username = `${user.username}#${user.discriminator}`
-    log.debug(`${username} used slash command ${command}`)
-    log.debug(`${command} : `, args)
+    log.debug(`bot id: ${client.user.id}`)
+    log.debug('Ready...')
 
-    try {
-      let slash
+    client.ws.on('INTERACTION_CREATE', async interaction => {
+      const command = interaction.data.name.toLowerCase()
+      const args = interaction.data.options
+      const user = interaction.member.user
+      const username = `${user.username}#${user.discriminator}`
+      log.debug(`${username} used slash command ${command}`)
+      log.debug(`${command} : `, args)
+
       try {
-        slash = require('./slashes/' + command)
+        let slash
+        try {
+          slash = require('./slashes/' + command)
+        } catch (e) {
+          throw new Error(`unknown slash command : \`${command}\``)
+        }
+        let content = await slash.execute(client, args)
+        if (typeof content !== 'string') {
+          content = content.join('\n')
+        }
+        client.api.interactions(interaction.id, interaction.token).callback.post({
+          data: {
+            type: 4,
+            data: {
+              content: content
+            }
+          }
+        })
       } catch (e) {
-        throw new Error(`unknown slash command : \`${command}\``)
-      }
-      let content = await slash.execute(client, args)
-      if (typeof content !== 'string') {
-        content = content.join('\n')
-      }
-      client.api.interactions(interaction.id, interaction.token).callback.post({
-        data: {
-          type: 4,
+        log.fatal(e)
+        client.api.interactions(interaction.id, interaction.token).callback.post({
           data: {
-            content: content
+            type: 4,
+            data: {
+              content: e.message
+            }
           }
-        }
-      })
-    } catch (e) {
-      log.fatal(e)
-      client.api.interactions(interaction.id, interaction.token).callback.post({
-        data: {
-          type: 4,
-          data: {
-            content: e.message
-          }
-        }
-      })
-    }
-  })
+        })
+      }
+    })
+  } catch (e) {
+    client.destroy()
+    return await processmanager.shutdown(e)
+  }
 }) // ready
 
 client.on('message', message => {
