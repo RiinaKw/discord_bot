@@ -76,14 +76,18 @@ class Slash extends require('../base/command') {
             .then(json => {
               const content = []
               content.push('**slash command list**')
-              json.forEach(command => {
-                const text = [
-                  `  \`${command.name}\` :`,
-                  `    **id** : ${command.id}`,
-                  `    **description** : ${command.description}`
-                ].join('\n')
-                content.push(text)
-              })
+              if (json.length) {
+                json.forEach(command => {
+                  const text = [
+                    `  \`${command.name}\` :`,
+                    `    **id** : ${command.id}`,
+                    `    **description** : ${command.description}`
+                  ].join('\n')
+                  content.push(text)
+                })
+              } else {
+                content.push('Nothing here.')
+              }
               message.reply(content)
             })
             .catch(err => {

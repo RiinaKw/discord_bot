@@ -43,6 +43,7 @@ class Api {
         if (err) {
           reject(err.message)
         } else if (parseInt(res.statusCode / 100) !== 2) {
+          log.fatal(res.body)
           reject(res.statusMessage)
         } else {
           let json = body
