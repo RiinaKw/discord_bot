@@ -1,5 +1,9 @@
 'use strict'
 
+// ここ読め : https://discord.com/developers/docs/interactions/slash-commands
+// option の値は : https://discord.com/developers/docs/interactions/slash-commands#applicationcommandoptiontype
+// bot の権限 : https://qiita.com/CyberRex/items/2ce560f88427f4764425
+
 const OptionType = require('./options')
 const PermissionType = require('./permissions')
 
