@@ -22,6 +22,7 @@ class Behavior {
         channel = guild.channels.cache.find(ch => ch.constructor.name === 'TextChannel')
       }
       app.initMessage(client, channel)
+      this.channel = channel
     })
 
     config.select('interval')
