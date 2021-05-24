@@ -107,6 +107,23 @@ class Slash extends require('../base/command') {
           const guild = message.channel.guild
           try {
             const list = await api.get(`/applications/${appId}/guilds/${guild.id}/commands`)
+              .then(json => {
+                const content = []
+                content.push('**guild slash command list**')
+                if (json.length) {
+                  json.forEach(command => {
+                    const text = [
+                      `  \`${command.name}\` :`,
+                      `    **id** : ${command.id}`,
+                      `    **description** : ${command.description}`
+                    ].join('\n')
+                    content.push(text)
+                  })
+                } else {
+                  content.push('Nothing here.')
+                }
+                message.reply(content)
+              })
               .catch(err => {
                 throw new Error(err)
               })
