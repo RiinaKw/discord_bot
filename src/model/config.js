@@ -27,6 +27,13 @@ module.exports = class Config extends Base {
     return query
   }
 
+  static insert (name, value) {
+    return connection.query(
+      `INSERT INTO ${this.TABLE} (name, value) VALUES (?, ?);`,
+      [name, value]
+    )
+  }
+
   static update (name, value) {
     return connection.query(
       `UPDATE ${this.TABLE} SET value = ? WHERE name = ?;`,

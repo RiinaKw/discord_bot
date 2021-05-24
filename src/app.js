@@ -6,15 +6,13 @@ const log = require('./lib/log4js')
 
 const reminder = require('./model/reminder')
 
-const config = require('../config/global')
-
 class App {
   init (client) {
-    if (config.activity) {
-      client.user.setPresence({ activity: config.activity })
-    }
+    this.config = require('../config/global')
 
-    this.commandPrefix = config.command_prefix
+    if (this.config.activity) {
+      client.user.setPresence({ activity: this.config.activity })
+    }
 
     client.app = this
   } // function init()
@@ -24,7 +22,7 @@ class App {
   }
 
   channelName () {
-    return config.channel || 'general'
+    return this.config.channel || 'general'
   } // function channelName()
 
   interval (channel) {

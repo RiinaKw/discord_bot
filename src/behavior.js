@@ -2,7 +2,6 @@
 
 const moment = require('moment')
 const fs = require('fs')
-const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
 const config = require('./model/config')
 
@@ -14,19 +13,31 @@ module.exports = a => {
 
 class Behavior {
   async init (client) {
+    app.init(client)
+
     // load commands
     this.loadCommand(client)
 
+    // configs
     await config.select('commandPrefix')
       .then(row => {
         this.commandPrefix = row.value
       })
+      .catch(e => {
+        this.commandPrefix = app.config.commandPrefix
+        config.insert('commandPrefix', app.config.commandPrefix)
+      })
     await config.select('interval')
       .then(row => {
         this.intervalPerMinutes = row.value
-        this.interval(true)
-        log.debug(`current interval : ${row.value}`)
       })
+      .catch(e => {
+        this.intervalPerMinutes = app.config.interval
+        config.insert('interval', app.config.interval)
+      })
+
+    this.interval(true)
+    log.debug(`current interval : ${this.intervalPerMinutes}`)
 
     const channelName = app.channelName()
     client.guilds.cache.forEach(guild => {
@@ -40,7 +51,6 @@ class Behavior {
     })
 
     client.behavior = this
-    app.init(client)
   } // function init()
 
   loadCommand (client) {
@@ -56,6 +66,10 @@ class Behavior {
   }
 
   interval (boot) {
+    if (Number(this.intervalPerMinutes) <= 0) {
+      throw new Error('interval must be greater than zero')
+    }
+
     if (!boot) {
       app.interval(this.channel)
     }

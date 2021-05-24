@@ -2,7 +2,7 @@
 
 module.exports = {
   channel: 'bot_test',
-  command_prefix: '$$',
+  commandPrefix: '$$',
   interval: 60,
   activity: {
     name: 'discord.js ',
