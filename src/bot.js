@@ -62,6 +62,7 @@ client.on('ready', async () => {
           data: {
             type: 4,
             data: {
+              flags: 64, // 自分にしか見えないようにする
               content: e.message
             }
           }

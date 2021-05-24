@@ -33,7 +33,7 @@ module.exports = {
         }
       }
       default:
-        return `unknwon command \`bot ${subcommand.name}\``
+        throw new Error(`unknwon command \`bot ${subcommand.name}\``)
     }
   }
 }

@@ -13,7 +13,7 @@ module.exports = {
         return 'rebooting...'
       }
       default:
-        return `unknwon command \`admin ${subcommand.name}\``
+        throw new Error(`unknwon command \`admin ${subcommand.name}\``)
     }
   }
 }
