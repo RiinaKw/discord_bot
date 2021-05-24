@@ -41,9 +41,6 @@ class Behavior {
 
   loadCommand (client) {
     try {
-      const token = require('../config/token')
-      client.login(token)
-
       client.commands = require('./lib/collection')
       const dir = `${__dirname}/commands`
       const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
