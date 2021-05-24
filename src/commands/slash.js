@@ -3,21 +3,7 @@
 const log = require('../lib/log4js')
 const api = require('../lib/api')
 
-const defs = []
-defs.push({
-  param: {
-    name: 'aaaaa',
-    description: 'Command of aaaaa'
-  },
-  permissions: true
-})
-defs.push({
-  param: {
-    name: 'bbbbb',
-    description: 'Command of bbbbb'
-  },
-  permissions: true
-})
+const defs = require('../slash-config/commands')
 
 class Slash extends require('../base/command') {
   constructor () {
@@ -193,12 +179,43 @@ class Slash extends require('../base/command') {
             message.reply(e.message)
             return
           }
-          log.info(def.param)
+          log.info(def.permissions)
 
           return await api.post(`/applications/${appId}/commands`, def.param)
             .then(result => {
               log.info(result)
-              message.reply('success')
+              message.reply('register success')
+
+              if (def.permissions) {
+                def.permissions.forEach(async item => {
+                  log.info(item)
+
+                  const guild = message.client.guilds.cache.find(guild => guild.name === item.target.guild)
+                  const role = guild.roles.cache.find(role => role.name === item.target.role)
+
+                  const commandId = result.id
+                  const json = {
+                    permissions: [
+                      {
+                        id: role.id,
+                        type: item.type,
+                        permission: true
+                      }
+                    ]
+                  }
+                  await api.put(
+                    `/applications/${appId}/guilds/${guild.id}/commands/${commandId}/permissions`,
+                    json
+                  )
+                    .then(result => {
+                      log.info(result)
+                      message.reply('register permission success')
+                    })
+                    .catch(e => {
+                      log.fatal('ERROR', e)
+                    })
+                })
+              }
             })
             .catch(e => {
               log.fatal('ERROR', e)

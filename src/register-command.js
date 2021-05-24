@@ -2,6 +2,7 @@
 
 console.log('ここ読め : https://discord.com/developers/docs/interactions/slash-commands')
 console.log('option の値は : https://discord.com/developers/docs/interactions/slash-commands#applicationcommandoptiontype')
+console.log('bot の権限 : https://qiita.com/CyberRex/items/2ce560f88427f4764425')
 
 const processmanager = require('./lib/process')
 const log = require('./lib/log4js')
@@ -17,49 +18,8 @@ try {
   processmanager.shutdown(e)
 }
 
-class OptionType {
-  static get SUB_COMMAND () {
-    return 1
-  }
-
-  static get SUB_COMMAND_GROUP () {
-    return 2
-  }
-
-  static get STRING () {
-    return 3
-  }
-
-  static get INTEGER () {
-    return 4
-  }
-
-  static get BOOLEAN () {
-    return 5
-  }
-
-  static get USER () {
-    return 6
-  }
-
-  static get CHANNEL () {
-    return 7
-  }
-
-  static get ROLE () {
-    return 8
-  }
-}
-
-class PermissionType {
-  static get ROLE () {
-    return 1
-  }
-
-  static get USER () {
-    return 2
-  }
-}
+const OptionType = require('./slash-config/options')
+const PermissionType = require('./slash-config/permissions')
 
 const defs = []
 
