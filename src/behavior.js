@@ -2,6 +2,7 @@
 
 const moment = require('moment')
 const fs = require('fs')
+const path = require('path')
 const log = require('./lib/log4js')
 const config = require('./model/config')
 
@@ -55,7 +56,7 @@ class Behavior {
 
   loadCommand (client) {
     client.commands = require('./lib/collection')
-    const dir = `${__dirname}/commands`
+    const dir = path.resolve(__dirname, 'commands')
     const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
     commandFiles.forEach(file => {
       const command = require(`${dir}/${file}`)

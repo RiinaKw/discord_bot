@@ -3,6 +3,7 @@
 // 参考 : https://discordjs.guide/command-handling/adding-features.html#reloading-commands
 
 const fs = require('fs')
+const path = require('path')
 const log = require('../lib/log4js')
 
 class Reload extends require('../base/command') {
@@ -47,13 +48,13 @@ class Reload extends require('../base/command') {
           }
 
           name = command.name
-          commandDir = `${__dirname}/../commands`
+          commandDir = path.resolve(__dirname, '../commands')
           break
         }
 
         case 'slash': {
           name = target
-          commandDir = `${__dirname}/../slashes`
+          commandDir = path.resolve(__dirname, '../slashes')
           break
         }
 
@@ -61,12 +62,11 @@ class Reload extends require('../base/command') {
           throw new Error(`unknown category \`${category}\``)
       }
 
-      const path = `${commandDir}/${name}.js`
+      commandFile = path.resolve(commandDir, `${name}.js`)
 
-      fs.open(path, 'r', (err, fd) => {
+      fs.open(commandFile, 'r', (err, fd) => {
         if (err) log.fatal(err)
       })
-      commandFile = require.resolve(path)
     } catch (e) {
       return message.reply(e.message)
     }
