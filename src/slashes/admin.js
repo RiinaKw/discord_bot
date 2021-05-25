@@ -18,6 +18,14 @@ class AdminSlash extends require('../base/slash') {
         processmanager.shutdown()
         return 'rebooting...'
       }
+
+      case 'user': {
+        const userId = subcommand.options.find(item => item.name === 'user').value
+        const user = client.users.fetch(userId)
+        log.warn(user)
+        return '501'
+      }
+
       default:
         this.unknown(subcommand.name)
     }

@@ -28,7 +28,15 @@ defs.push({
       {
         name: 'user',
         description: 'Show user detail **use embed',
-        type: OptionType.SUB_COMMAND
+        type: OptionType.SUB_COMMAND,
+        options: [
+          {
+            name: 'user',
+            description: 'user',
+            type: OptionType.USER,
+            required: true
+          }
+        ]
       }
     ]
   },
