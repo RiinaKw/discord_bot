@@ -8,20 +8,7 @@ const OptionType = require('./options')
 const PermissionType = require('./permissions')
 
 const defs = []
-defs.push({
-  param: {
-    name: 'aaaaa',
-    description: 'Command of aaaaa'
-  },
-  permissions: true
-})
-defs.push({
-  param: {
-    name: 'bbbbb',
-    description: 'Command of bbbbb'
-  },
-  permissions: true
-})
+
 defs.push({
   param: {
     name: 'admin',
@@ -39,8 +26,8 @@ defs.push({
         type: OptionType.SUB_COMMAND
       },
       {
-        name: 'another',
-        description: 'another command',
+        name: 'user',
+        description: 'Show user detail **use embed',
         type: OptionType.SUB_COMMAND
       }
     ]
@@ -71,6 +58,29 @@ defs.push({
             description: 'interval value',
             type: OptionType.INTEGER,
             required: false
+          }
+        ]
+      },
+      {
+        name: 'author',
+        description: 'Show author info of this bot',
+        type: OptionType.SUB_COMMAND,
+        options: [
+          {
+            name: 'type',
+            description: 'info type',
+            type: OptionType.STRING,
+            required: true,
+            choices: [
+              {
+                name: 'Twitter',
+                value: 'https://twitter.com/RiinaKw'
+              },
+              {
+                name: 'Github',
+                value: 'https://github.com/RiinaKw/discord_bot'
+              }
+            ]
           }
         ]
       },

@@ -38,6 +38,10 @@ class BotSlash extends require('../base/slash') {
           ]
         }
       }
+
+      case 'author':
+        return subcommand.options.find(item => item.name === 'type').value
+
       default:
         this.unknown(subcommand.name)
     }
