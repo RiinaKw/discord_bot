@@ -4,6 +4,7 @@ const log = require('../lib/log4js')
 const api = require('../lib/api')
 
 const defs = require('../slash-config/commands')
+const PermissionType = require('../slash-config/permissions')
 
 class Slash extends require('../base/command') {
   constructor () {
@@ -140,7 +141,7 @@ class Slash extends require('../base/command') {
           if (!command) return
 
           return await api.get(`/applications/${appId}/commands/${command.id}`)
-            .then(json => {
+            .then(async json => {
               log.info(json)
               const jsonString = JSON.stringify(json)
               // sender.send(b.channel, 'see console')
@@ -149,6 +150,20 @@ class Slash extends require('../base/command') {
                 `**description** : ${json.description}`,
                 `**json** : ${jsonString}`
               ]
+
+              await api.get(
+                `/applications/${appId}/guilds/${message.channel.guild.id}/commands/${command.id}/permissions`
+              )
+                .then(json => {
+                  log.info(json)
+                  const jsonString = JSON.stringify(json)
+                  message.reply('get guild permission')
+                  content.push(`**permission** : ${jsonString}`)
+                })
+                .catch(e => {
+                  log.fatal('guild permission error', e)
+                })
+
               message.reply(content)
             })
             .catch(e => {
@@ -199,27 +214,41 @@ class Slash extends require('../base/command') {
           log.info(def.permissions)
 
           return await api.post(`/applications/${appId}/commands`, def.param)
-            .then(result => {
+            .then(async result => {
               log.info(result)
               message.reply('register success')
 
               if (def.permissions.length) {
-                def.permissions.forEach(async item => {
+                const commandId = result.id
+
+                for (const item of def.permissions) {
                   log.info(item)
+                  log.info('========================================')
 
-                  const guild = message.client.guilds.cache.find(guild => guild.name === item.target.guild)
-                  const role = guild.roles.cache.find(role => role.name === item.target.role)
+                  const guild = message.client.guilds.cache.find(guild => guild.name === item.guild)
 
-                  const commandId = result.id
                   const json = {
-                    permissions: [
-                      {
-                        id: role.id,
-                        type: item.type,
-                        permission: true
-                      }
-                    ]
+                    permissions: []
                   }
+                  item.allow.forEach(permission => {
+                    let target
+                    switch (permission.type) {
+                      case PermissionType.ROLE: {
+                        const role = guild.roles.cache.find(role => role.name === permission.target)
+                        target = role.id
+                        break
+                      }
+                      case PermissionType.USER:
+                        target = permission.target
+                    }
+                    json.permissions.push({
+                      id: target,
+                      type: permission.type,
+                      permission: true
+                    })
+                  })
+                  log.fatal(json)
+
                   await api.put(
                     `/applications/${appId}/guilds/${guild.id}/commands/${commandId}/permissions`,
                     json
@@ -231,7 +260,7 @@ class Slash extends require('../base/command') {
                     .catch(e => {
                       log.fatal('ERROR', e)
                     })
-                })
+                }
               }
             })
             .catch(e => {

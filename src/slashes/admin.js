@@ -21,8 +21,10 @@ class AdminSlash extends require('../base/slash') {
 
       case 'user': {
         const userId = subcommand.options.find(item => item.name === 'user').value
-        const user = client.users.fetch(userId)
-        log.warn(user)
+        client.users.fetch(userId)
+          .then(user => {
+            log.warn(user)
+          })
         return '501'
       }
 

@@ -27,7 +27,7 @@ defs.push({
       },
       {
         name: 'user',
-        description: 'Show user detail **use embed',
+        description: 'Show user detail [[use embed]]',
         type: OptionType.SUB_COMMAND,
         options: [
           {
@@ -42,12 +42,26 @@ defs.push({
   },
   permissions: [
     {
-      target: {
-        guild: 'Riina\'s test server',
-        role: 'admin'
-      },
-      type: PermissionType.ROLE,
-      permission: true
+      guild: 'Riina\'s test server',
+      allow: [
+        {
+          type: PermissionType.ROLE,
+          target: 'admin'
+        },
+        {
+          type: PermissionType.ROLE,
+          target: '広報'
+        }
+      ]
+    },
+    {
+      guild: 'からもち部屋',
+      allow: [
+        {
+          type: PermissionType.USER,
+          target: '320142596833935360' // リイナ#1646
+        }
+      ]
     }
   ]
 })
@@ -98,6 +112,12 @@ defs.push({
         type: OptionType.SUB_COMMAND,
         options: [
           {
+            name: 'name',
+            description: 'activity name',
+            type: OptionType.STRING,
+            required: false
+          },
+          {
             name: 'type',
             description: 'activity type',
             type: OptionType.STRING,
@@ -128,12 +148,6 @@ defs.push({
                 value: 'COMPETING'
               }
             ]
-          },
-          {
-            name: 'name',
-            description: 'activity name',
-            type: OptionType.STRING,
-            required: false
           }
         ]
       } // activity
