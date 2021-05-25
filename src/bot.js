@@ -24,6 +24,8 @@ try {
 
 client.on('ready', async () => {
   try {
+    log.trace('initialize bot layer')
+
     await behavior.init(client)
 
     log.debug(`bot id: ${client.user.id}`)

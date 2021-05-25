@@ -13,17 +13,29 @@ module.exports = a => {
 
 class Behavior {
   async init (client) {
+    log.trace('initialize behavior layer')
+
     await app.init(client)
+
+    this.config = require('./lib/config')
+    await this.config.load()
+
+    const activity = this.config.get('activity')
+    if (activity) {
+      let json = activity
+      if (typeof json === 'string') json = JSON.parse(json)
+      client.user.setPresence({ activity: json })
+    }
 
     // load commands
     this.loadCommand(client)
 
-    this.intervalPerMinutes = app.config.get('interval')
-    this.commandPrefix = app.config.get('commandPrefix')
+    this.intervalPerMinutes = this.config.get('interval')
+    this.commandPrefix = this.config.get('commandPrefix')
 
     this.interval(true)
 
-    const channelName = app.config.get('channel')
+    const channelName = this.config.get('channel')
     client.guilds.cache.forEach(guild => {
       let channel = guild.channels.cache.find(ch => ch.name === channelName)
       if (!channel) {

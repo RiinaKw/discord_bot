@@ -8,15 +8,7 @@ const reminder = require('./model/reminder')
 
 class App {
   async init (client) {
-    this.config = require('./lib/config')
-    await this.config.load()
-
-    const activity = this.config.get('activity')
-    if (activity) {
-      let json = activity
-      if (typeof json === 'string') json = JSON.parse(json)
-      client.user.setPresence({ activity: json })
-    }
+    log.trace('initialize app layer')
 
     client.app = this
   } // function init()
