@@ -30,7 +30,7 @@ class Behavior {
         // fallback channel : first TextChannel
         channel = guild.channels.cache.find(ch => ch.constructor.name === 'TextChannel')
       }
-      app.initMessage(client, channel)
+      app.initMessage(channel)
       this.channel = channel
     })
 

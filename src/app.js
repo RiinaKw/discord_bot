@@ -21,7 +21,7 @@ class App {
     client.app = this
   } // function init()
 
-  initMessage (client, channel) {
+  initMessage (channel) {
     sender.send(channel, 'Ready go.')
   }
 
