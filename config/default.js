@@ -5,7 +5,7 @@ module.exports = {
   commandPrefix: '$$',
   interval: 60,
   activity: {
-    name: 'discord.js ',
+    name: 'discord.js',
     type: 'PLAYING'
   }
 }

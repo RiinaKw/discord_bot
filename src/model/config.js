@@ -1,20 +1,12 @@
 'use strict'
 
-let connection
-require('../lib/database')
-  .then(conn => {
-    connection = conn
-  })
-
-const Base = require('./base')
-
-module.exports = class Config extends Base {
-  static get TABLE () {
+class ModelConfig extends require('./base') {
+  get TABLE () {
     return 'configs'
   }
 
-  static select (name) {
-    const query = connection.query(
+  async select (name) {
+    const query = this.connection.query(
       `SELECT * FROM ${this.TABLE} WHERE name = ?;`,
       [name]
     )
@@ -27,17 +19,23 @@ module.exports = class Config extends Base {
     return query
   }
 
-  static insert (name, value) {
-    return connection.query(
+  insert (name, value) {
+    return this.connection.query(
       `INSERT INTO ${this.TABLE} (name, value) VALUES (?, ?);`,
       [name, value]
     )
   }
 
-  static update (name, value) {
-    return connection.query(
+  update (name, value) {
+    return this.connection.query(
       `UPDATE ${this.TABLE} SET value = ? WHERE name = ?;`,
       [value, name]
     )
   }
-} // class Reminder
+} // class Config
+
+module.exports = async () => {
+  const db = new ModelConfig()
+  await db.connect()
+  return db
+}

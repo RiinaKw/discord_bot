@@ -7,11 +7,15 @@ const log = require('./lib/log4js')
 const reminder = require('./model/reminder')
 
 class App {
-  init (client) {
-    this.config = require('../config/global')
+  async init (client) {
+    this.config = require('./lib/config')
+    await this.config.load()
 
-    if (this.config.activity) {
-      client.user.setPresence({ activity: this.config.activity })
+    const activity = this.config.get('activity')
+    if (activity) {
+      let json = activity
+      if (typeof json === 'string') json = JSON.parse(json)
+      client.user.setPresence({ activity: json })
     }
 
     client.app = this
@@ -20,10 +24,6 @@ class App {
   initMessage (client, channel) {
     sender.send(channel, 'Ready go.')
   }
-
-  channelName () {
-    return this.config.channel || 'general'
-  } // function channelName()
 
   interval (channel) {
     const content = moment().format('YYYY-MM-DD HH:mm:ss')

@@ -4,7 +4,6 @@ const moment = require('moment')
 const fs = require('fs')
 const path = require('path')
 const log = require('./lib/log4js')
-const config = require('./model/config')
 
 let app
 
@@ -14,33 +13,17 @@ module.exports = a => {
 
 class Behavior {
   async init (client) {
-    app.init(client)
+    await app.init(client)
 
     // load commands
     this.loadCommand(client)
 
-    // configs
-    await config.select('commandPrefix')
-      .then(row => {
-        this.commandPrefix = row.value
-      })
-      .catch(e => {
-        this.commandPrefix = app.config.commandPrefix
-        config.insert('commandPrefix', app.config.commandPrefix)
-      })
-    await config.select('interval')
-      .then(row => {
-        this.intervalPerMinutes = row.value
-      })
-      .catch(e => {
-        this.intervalPerMinutes = app.config.interval
-        config.insert('interval', app.config.interval)
-      })
+    this.intervalPerMinutes = app.config.get('interval')
+    this.commandPrefix = app.config.get('commandPrefix')
 
     this.interval(true)
-    log.debug(`current interval : ${this.intervalPerMinutes}`)
 
-    const channelName = app.channelName()
+    const channelName = app.config.get('channel')
     client.guilds.cache.forEach(guild => {
       let channel = guild.channels.cache.find(ch => ch.name === channelName)
       if (!channel) {

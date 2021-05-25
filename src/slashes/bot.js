@@ -1,7 +1,6 @@
 'use strict'
 
 const log = require('../lib/log4js')
-const config = require('../model/config')
 
 class BotSlash extends require('../base/slash') {
   constructor () {
@@ -22,9 +21,8 @@ class BotSlash extends require('../base/slash') {
           }
 
           // change interval time
-          b.intervalPerMinutes = minutes
+          b.intervalPerMinutes = client.app.config.set('interval', minutes)
           b.interval(true)
-          config.update('interval', minutes)
 
           log.info(`bot interval changed : ${minutes} minutes`)
           return `**bot interval** : set to ${minutes} minutes`
