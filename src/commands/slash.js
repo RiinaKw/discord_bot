@@ -203,7 +203,7 @@ class Slash extends require('../base/command') {
               log.info(result)
               message.reply('register success')
 
-              if (def.permissions) {
+              if (def.permissions.length) {
                 def.permissions.forEach(async item => {
                   log.info(item)
 

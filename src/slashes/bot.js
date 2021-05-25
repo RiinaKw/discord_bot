@@ -40,6 +40,33 @@ class BotSlash extends require('../base/slash') {
       case 'author':
         return subcommand.options.find(item => item.name === 'type').value
 
+      case 'activity': {
+        if (subcommand.options) {
+          const activityName = subcommand.options.find(item => item.name === 'name')
+          const activityType = subcommand.options.find(item => item.name === 'type')
+          if (activityName && activityType) {
+            const json = {
+              name: activityName.value,
+              type: activityType.value
+            }
+            client.app.config.set('activity', json)
+            client.user.setPresence({ activity: json })
+            return [
+              '**bot activity** :',
+              `  ${json.type} ${json.name}`
+            ]
+          }
+          return 'invalid args'
+        } else {
+          // show current
+          const json = client.app.config.get('activity')
+          return [
+            '**bot activity** :',
+            `  ${json.type} ${json.name}`
+          ]
+        }
+      }
+
       default:
         this.unknown(subcommand.name)
     }

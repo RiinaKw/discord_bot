@@ -90,12 +90,6 @@ defs.push({
         type: OptionType.SUB_COMMAND,
         options: [
           {
-            name: 'name',
-            description: 'activity name',
-            type: OptionType.STRING,
-            required: false
-          },
-          {
             name: 'type',
             description: 'activity type',
             type: OptionType.STRING,
@@ -106,13 +100,35 @@ defs.push({
                 value: 'PLAYING'
               },
               {
-                name: 'Another',
-                value: 'ANOTHER'
+                name: 'Streaming',
+                value: 'STREAMING'
+              },
+              {
+                name: 'Listening',
+                value: 'LISTENING'
+              },
+              {
+                name: 'Watching',
+                value: 'WATCHING'
+              },
+              {
+                name: 'Custom',
+                value: 'CUSTOM'
+              },
+              {
+                name: 'Competing',
+                value: 'COMPETING'
               }
             ]
+          },
+          {
+            name: 'name',
+            description: 'activity name',
+            type: OptionType.STRING,
+            required: false
           }
         ]
-      }
+      } // activity
     ] // options
   },
   permissions: true
